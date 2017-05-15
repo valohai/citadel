@@ -34,6 +34,12 @@ class Asset(models.Model):
     round = models.ForeignKey(Round, related_name='assets')
     name = models.CharField(max_length=128)
     file = models.FileField(upload_to='rounds/assets')
+    description = models.TextField(blank=True)
+
+    class Meta:
+        unique_together = (('round', 'name',))
+        ordering = ('name',)
+
 
 
 class Entry(models.Model):
