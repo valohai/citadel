@@ -22,6 +22,7 @@ class Round(models.Model):
     name = models.CharField(max_length=128)
     screenshot = models.ImageField(upload_to='rounds', blank=True)
     accepting_entries = models.BooleanField(default=True)
+    accepting_votes = models.BooleanField(default=False)
     is_visible = models.BooleanField(default=True)
 
     class Meta:

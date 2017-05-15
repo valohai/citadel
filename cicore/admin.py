@@ -18,12 +18,14 @@ class RoundAdmin(admin.ModelAdmin):
         'name',
         'is_visible',
         'accepting_entries',
+        'accepting_votes',
         'editor_url',
     )
     list_filter = (
         'event',
         'is_visible',
         'accepting_entries',
+        'accepting_votes',
     )
 
     def editor_url(self, instance):
