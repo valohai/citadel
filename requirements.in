@@ -3,3 +3,4 @@ django~=1.11
 Pillow
 pip-tools
 ulid2
+whitenoise
