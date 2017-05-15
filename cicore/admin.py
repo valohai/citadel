@@ -9,6 +9,16 @@ class AssetInline(admin.TabularInline):
 
 class RoundAdmin(admin.ModelAdmin):
     inlines = [AssetInline]
+    list_display = (
+        'id',
+        'event',
+        'name',
+        'accepting_entries',
+    )
+    list_filter = (
+        'event',
+        'accepting_entries',
+    )
 
 
 class EntryAdmin(admin.ModelAdmin):

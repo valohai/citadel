@@ -64,6 +64,8 @@ class RoundSaveView(DetailView):
             key=settings.JWT_KEY,
         )
         self.object = self.get_object()
+        if not self.object.accepting_entries:
+            return JsonResponse({'error': 'not accepting entries'}, status=403)
         entry = Entry.objects.create(
             round=self.object,
             code=request.POST['code'],
