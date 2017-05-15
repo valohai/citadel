@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from django.views.decorators.csrf import csrf_exempt
 
-from cifront.views import RoundEditorView, RoundInstructionsView, AssetRedirectView, RoundSaveView
+from cifront.views import AssetRedirectView, RoundEditorView, RoundInstructionsView, RoundSaveView
 
 urlpatterns = [
     url(r'^e/(?P<slug>.+?)/$', RoundEditorView.as_view(), name='round-editor'),
