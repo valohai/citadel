@@ -10,6 +10,17 @@ class AssetInline(admin.TabularInline):
     model = Asset
 
 
+def format_link(url):
+    attrs = {
+        'href': url,
+        'target': '_blank',
+    }
+    return mark_safe('<a{}>{}</a>'.format(
+        flatatt(attrs),
+        url,
+    ))
+
+
 class RoundAdmin(admin.ModelAdmin):
     inlines = [AssetInline]
     list_display = (
@@ -20,6 +31,9 @@ class RoundAdmin(admin.ModelAdmin):
         'accepting_entries',
         'accepting_votes',
         'editor_url',
+        'show_url',
+        'vote_url',
+        'results_url',
     )
     list_filter = (
         'event',
@@ -29,15 +43,28 @@ class RoundAdmin(admin.ModelAdmin):
     )
 
     def editor_url(self, instance):
-        url = reverse('round-editor', kwargs={'slug': instance.slug})
-        attrs = {
-            'href': url,
-            'target': '_blank',
-        }
-        return mark_safe('<a{}>{}</a>'.format(
-            flatatt(attrs),
-            url,
-        ))
+        if instance.accepting_entries:
+            url = reverse('round-editor', kwargs={'slug': instance.slug})
+            return format_link(url)
+        return ''
+
+    def vote_url(self, instance):
+        if instance.accepting_votes:
+            url = reverse('round-vote', kwargs={'slug': instance.slug})
+            return format_link(url)
+        return ''
+
+    def show_url(self, instance):
+        if not instance.accepting_entries:
+            url = reverse('round-show', kwargs={'slug': instance.slug})
+            return format_link(url)
+        return ''
+
+    def results_url(self, instance):
+        if not instance.accepting_entries and not instance.accepting_votes:
+            url = reverse('round-results', kwargs={'slug': instance.slug})
+            return format_link(url)
+        return ''
 
 
 class EntryAdmin(admin.ModelAdmin):
