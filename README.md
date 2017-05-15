@@ -73,10 +73,14 @@ License
 -------
 
 * The project is Copyright (c) 2017, Valohai; licensed under the MIT License.
+* The Code in the Dark name and logos are Copyright (c) 2017, Tictail Inc.;
+  licensed under the 3-clause BSD License (see `LICENSE.tictail`).
+  The use of the Code in the Dark brand in this repository is in good faith.
+  Any requests for external use should seek the permission of Tictail directly.
 * `cifront/app` and `cifront/templates/editor.html`
   are adapted from the [Code in the Dark Editor][citdedit],
   which is Copyright (c) 2015, Tictail Inc.;
-  licensed under the 3-clause BSD License (see `LICENSE.editor`).
+  licensed under the 3-clause BSD License (see `LICENSE.tictail`).
 
 
 
