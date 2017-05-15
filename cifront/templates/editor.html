@@ -4,6 +4,10 @@
 <head>
   <meta charset="UTF-8">
   <title>Code in the Dark – {{ round.name }}</title>
+    <script>
+        var SAVE_URL = "{{ save_url }}";
+        var SAVE_TOKEN = "{{ save_token }}";
+    </script>
   <script src="{% static "editor/bundle.js" %}"></script>
 </head>
 <body>

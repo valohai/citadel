@@ -2,5 +2,6 @@ django-environ
 django~=1.11
 Pillow
 pip-tools
+PyJWT
 ulid2
 whitenoise

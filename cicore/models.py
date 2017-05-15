@@ -58,4 +58,5 @@ class Entry(models.Model):
     ctime = models.DateTimeField(auto_now_add=True, editable=False)
     round = models.ForeignKey(Round, related_name='entries')
     contestant_name = models.CharField(max_length=128)
+    nonce = models.CharField(max_length=64, unique=True, editable=False)
     code = models.TextField()

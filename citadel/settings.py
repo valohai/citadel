@@ -1,11 +1,14 @@
+import hashlib
 import os
 
 from environ import Env
+from jwt.utils import force_bytes
 
 env = Env()
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEBUG = env.bool('DEBUG', default=False)
 SECRET_KEY = env.str('SECRET_KEY', default=('x' if DEBUG else Env.NOTSET))
+JWT_KEY = env.str('JWT_KEY', default=hashlib.sha256(force_bytes(SECRET_KEY)).hexdigest())
 ALLOWED_HOSTS = ['*']
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'

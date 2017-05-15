@@ -253,7 +253,9 @@ class App
     "
 
     if confirm?.toLowerCase() is "yes"
-      @$result[0].contentWindow.postMessage(@editor.getValue(), "*")
+      code = @editor.getValue()
+      @trySaveCode code
+      @$result[0].contentWindow.postMessage(code, "*")
       @$result.show()
 
   onChange: (e) =>
@@ -272,5 +274,20 @@ class App
 
     _.defer =>
       @throttledSpawnParticles(token.type) if token
+
+  trySaveCode: (code) =>
+    return unless window.SAVE_URL
+    $.ajax({
+      type: 'POST',
+      url: window.SAVE_URL,
+      data: {
+        token: window.SAVE_TOKEN || '',
+        code: code,
+        author: localStorage['name'] || '',
+      },
+      complete: (xhr, status) =>
+        if status != 'success'
+          alert "Uploading your code failed (status: #{status})"
+    })
 
 $ -> new App
