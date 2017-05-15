@@ -10,7 +10,8 @@
 </head>
 <body>
 {% if voted %}
-<h1>Thank you for voting!</h1>
+    <h1>Thank you for voting!</h1>
+    <script>localStorage.setItem('v-{{ round.id }}', '1');</script>
 {% else %}
     <h1>I think the winner is &hellip;</h1>
     {% for entry in round.entries.all %}
@@ -19,6 +20,11 @@
             <button type="submit">{{ entry.contestant_name }}</button>
         </form>
     {% endfor %}
+    <script>
+      if (localStorage.getItem('v-{{ round.id }}')) {
+        document.body.innerHTML = '<h1>You seem to have voted, though a cookie is missing :)';
+      }
+    </script>
 {% endif %}
 </body>
 </html>
