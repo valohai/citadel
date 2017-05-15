@@ -109,11 +109,11 @@ class App
     @$nameTag.text(name) if name
 
   loadContent: ->
-    return unless (content = localStorage["content"])
+    return unless (content = localStorage[window.STORAGE_ID || "content"])
     @editor.setValue content, -1
 
   saveContent: =>
-    localStorage["content"] = @editor.getValue()
+    localStorage[window.STORAGE_ID || "content"] = @editor.getValue()
 
   onFrame: (time) =>
     @drawParticles time - @lastDraw
