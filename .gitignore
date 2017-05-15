@@ -1,4 +1,5 @@
 *.py[co]
 .idea
+/data
 /var
 node_modules
