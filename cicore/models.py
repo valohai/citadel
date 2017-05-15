@@ -13,6 +13,7 @@ class Event(models.Model):
 
 class Round(models.Model):
     id = models.UUIDField(primary_key=True, default=ulid2.generate_ulid_as_uuid)
+    slug = models.SlugField(max_length=64, unique=True)
     ctime = models.DateTimeField(auto_now_add=True, editable=False)
     event = models.ForeignKey(Event, related_name='rounds')
     number = models.PositiveIntegerField()
