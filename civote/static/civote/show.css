@@ -1,0 +1,42 @@
+html, body {
+    height: 100vh;
+}
+
+body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    font: 10pt sans-serif;
+}
+
+header {
+    background: #333;
+    padding: 2px;
+    display: flex;
+}
+
+header a {
+    color: #fff;
+    flex: 1;
+    text-align: center;
+}
+
+iframe {
+    flex: 1 1 auto;
+    border: none;
+}
+
+#contestant {
+    position: fixed;
+    left: 3vmin;
+    bottom: 3vmin;
+    opacity: 0.7;
+    font-size: 80px;
+    color: orangered;
+    font-weight: bold;
+}
+#contestant:hover {
+    opacity: 0;
+    cursor: none;
+}
+

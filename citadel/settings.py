@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'citadel',
     'cicore',
     'cifront',
+    'civote',
 ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

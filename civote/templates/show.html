@@ -1,0 +1,24 @@
+{% load static %}<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Showing entries for {{ round.name }}</title>
+    <link rel="stylesheet" href="{% static "civote/show.css" %}">
+    <script src="{% static "civote/show.js" %}"></script>
+</head>
+<body>
+<header>
+    {% for entry in round.entries.all %}
+        <a href="#"
+           onclick="showEntry('{{ entry.contestant_name|escapejs }}', '{{ entry.id }}')">
+            {{ entry.contestant_name }}
+        </a>
+    {% endfor %}
+</header>
+<iframe id="show-iframe"></iframe>
+<div id="contestant"></div>
+</body>
+</html>
