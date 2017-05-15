@@ -16,6 +16,8 @@ STATIC_URL = '/static/'
 STATIC_ROOT = env.str('STATIC_ROOT', default=os.path.join(VAR_ROOT, 'static'))
 MEDIA_URL = '/media/'
 MEDIA_ROOT = env.str('MEDIA_ROOT', default=os.path.join(VAR_ROOT, 'media'))
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
+SESSION_COOKIE_NAME = 'citadel_session'
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -24,6 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'citadel',
+    'cicore',
 ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
