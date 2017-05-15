@@ -18,6 +18,13 @@ class RoundEditorView(DetailView):
     context_object_name = 'round'
     queryset = Round.objects.filter(is_visible=True)
 
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if not self.object.accepting_entries:
+            return HttpResponseNotFound('Sorry! This round is no longer accepting entries.')
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
+
     def get_context_data(self, **kwargs):
         context = super(RoundEditorView, self).get_context_data(**kwargs)
         context['instructions_url'] = reverse('round-instructions', kwargs={'pk': self.object.pk})
