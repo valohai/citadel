@@ -14,7 +14,8 @@ pillow==4.1.1
 pip-tools==1.9.0
 pyjwt==1.5.0
 pytz==2017.2              # via django
+qrcode==5.3
 ranking==0.3.1
-six==1.10.0               # via django-environ, pip-tools
+six==1.10.0               # via django-environ, pip-tools, qrcode
 ulid2==0.1.1
 whitenoise==3.3.0

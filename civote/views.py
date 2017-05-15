@@ -1,10 +1,14 @@
+import base64
 import time
 from collections import Counter
 
+import qrcode
 import ulid2
 from django.db.models import Count
 from django.http.response import HttpResponse, HttpResponseRedirect
+from django.urls import reverse
 from django.views.generic import DetailView
+from io import BytesIO
 from ipware.ip import get_ip
 from ranking import Ranking
 
@@ -17,6 +21,16 @@ class RoundShowView(DetailView):
     template_name = 'show.html'
     context_object_name = 'round'
     queryset = Round.objects.filter(is_visible=True)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        vote_url = self.request.build_absolute_uri(reverse('round-vote', kwargs={'slug': self.object.slug}))
+        qr_img = qrcode.make(vote_url, border=0)
+        io = BytesIO()
+        qr_img.save(io, format='png')
+        context['vote_url'] = vote_url
+        context['vote_url_qr_image'] = 'data:image/png;base64,%s' % base64.b64encode(io.getvalue()).decode('ascii')
+        return context
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()

@@ -4,6 +4,7 @@ django~=1.11
 Pillow
 pip-tools
 PyJWT
+qrcode
 ranking
 ulid2
 whitenoise
