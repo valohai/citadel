@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>404</title>
+    <style>
+        body {
+            background: #333;
+            color: #4EFFA1;
+            font: 3vmin sans-serif;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<h1>404, oh no :(</h1>
+<script>
+  setInterval(function () {
+    var h1s = document.querySelectorAll('h1');
+    for (var i = 0; i < h1s.length; i++) {
+      Object.assign(h1s[i].style, {
+        position: 'absolute',
+        left: '' + (Math.random() * 100) + 'vw',
+        top: '' + (Math.random() * 100) + 'vh',
+      });
+    }
+    if (h1s.length < 10) {
+      document.body.appendChild(h1s[0].cloneNode(true));
+    }
+  }, 100);
+</script>
+</body>
+</html>
