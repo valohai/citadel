@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'citadel',
     'cicore',
+    'cifront',
 ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
