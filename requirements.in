@@ -1,7 +1,9 @@
 django-environ
+django-ipware
 django~=1.11
 Pillow
 pip-tools
 PyJWT
+ranking
 ulid2
 whitenoise

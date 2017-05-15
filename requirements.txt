@@ -6,6 +6,7 @@
 #
 click==6.7                # via pip-tools
 django-environ==0.4.3
+django-ipware==1.1.6
 django==1.11.1
 first==2.0.1              # via pip-tools
 olefile==0.44             # via pillow
@@ -13,6 +14,7 @@ pillow==4.1.1
 pip-tools==1.9.0
 pyjwt==1.5.0
 pytz==2017.2              # via django
+ranking==0.3.1
 six==1.10.0               # via django-environ, pip-tools
 ulid2==0.1.1
 whitenoise==3.3.0

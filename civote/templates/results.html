@@ -1,0 +1,38 @@
+{% load static %}<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Voting Results: {{ round.name }}</title>
+    <link rel="stylesheet" href="{% static "civote/vote.css" %}">
+</head>
+<body>
+<h1>{{ round.name }}</h1>
+{% if round.accepting_votes %}
+    Voting is still ongoing...
+{% else %}
+    <h2>Total {{ results.n_votes }} votes were cast</h2>
+    <table class="results">
+        <tbody>
+            {% for result in results.detail %}
+                <tr class="rank-row-{{ result.rank }}">
+                    <td class="result-rank">#{{ result.rank }}</td>
+                    <td>{{ result.entry.contestant_name }}</td>
+                    <td class="result-votes">{{ result.votes }} votes</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <script>
+    Array.from(document.querySelectorAll('.results tr')).reverse().forEach(function(el, i) {
+      setTimeout(function() {
+        el.style.opacity = 1;
+        el.style.transform = 'scaleY(1)';
+      }, i * 750);
+    });
+    </script>
+{% endif %}
+</body>
+</html>

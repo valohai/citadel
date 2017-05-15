@@ -1,0 +1,24 @@
+{% load static %}<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Voting in {{ round.name }}</title>
+    <link rel="stylesheet" href="{% static "civote/vote.css" %}">
+</head>
+<body>
+{% if voted %}
+<h1>Thank you for voting!</h1>
+{% else %}
+    <h1>I think the winner is &hellip;</h1>
+    {% for entry in round.entries.all %}
+        <form method="post" onsubmit="return confirm('Vote for {{ entry.contestant_name|escapejs }}?')">
+            <input type="hidden" name="entry" value="{{ entry.id }}">
+            <button type="submit">{{ entry.contestant_name }}</button>
+        </form>
+    {% endfor %}
+{% endif %}
+</body>
+</html>
