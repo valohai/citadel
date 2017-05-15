@@ -16,6 +16,7 @@ class RoundEditorView(DetailView):
     model = Round
     template_name = 'editor.html'
     context_object_name = 'round'
+    queryset = Round.objects.filter(is_visible=True)
 
     def get_context_data(self, **kwargs):
         context = super(RoundEditorView, self).get_context_data(**kwargs)
@@ -36,6 +37,7 @@ class RoundInstructionsView(DetailView):
     model = Round
     template_name = 'instructions.html'
     context_object_name = 'round'
+    queryset = Round.objects.filter(is_visible=True)
 
 
 class AssetRedirectView(DetailView):

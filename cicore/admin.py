@@ -13,10 +13,12 @@ class RoundAdmin(admin.ModelAdmin):
         'id',
         'event',
         'name',
+        'is_visible',
         'accepting_entries',
     )
     list_filter = (
         'event',
+        'is_visible',
         'accepting_entries',
     )
 
