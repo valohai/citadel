@@ -30,7 +30,7 @@
   </div>
 
   <div class="instructions-container">
-    <iframe class="instructions" src="../app/assets/instructions.html"></iframe>
+    <iframe class="instructions" src="{{ instructions_url }}"></iframe>
   </div>
 
   <div class="button-bar">
@@ -38,6 +38,6 @@
     <button class="instructions-button">Instructions</button>
   </div>
 
-  <iframe class="result" src="../app/assets/result.html" frameborder="0"><iframe>
+  <iframe class="result" src="{% static "editor/result.html" %}" frameborder="0"><iframe>
 </body>
 </html>

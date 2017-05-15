@@ -1,5 +1,7 @@
 import ulid2
 from django.db import models
+from django.urls import reverse
+from django.utils.functional import cached_property
 
 
 class Event(models.Model):
@@ -40,6 +42,15 @@ class Asset(models.Model):
         unique_together = (('round', 'name',))
         ordering = ('name',)
 
+    @cached_property
+    def short_url(self):
+        return reverse(
+            'asset-redirect',
+            kwargs={
+                'round_slug': self.round.slug,
+                'asset_name': self.name,
+            }
+        )
 
 
 class Entry(models.Model):
