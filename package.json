@@ -4,6 +4,10 @@
   "version": "0.1.0",
   "description": "",
   "author": "",
+  "scripts": {
+    "dev": "webpack --watch --progress",
+    "build": "webpack -p --progress",
+  },
   "dependencies": {
     "autoprefixer-core": "^6.0.1",
     "brace": "^0.5.0",
