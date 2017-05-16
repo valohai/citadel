@@ -1,14 +1,14 @@
 import base64
 import time
-from collections import Counter
+from io import BytesIO
 
 import qrcode
 import ulid2
 from django.db.models import Count
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
+from django.views import View
 from django.views.generic import DetailView
-from io import BytesIO
 from ipware.ip import get_ip
 from ranking import Ranking
 
@@ -29,6 +29,7 @@ class RoundShowView(DetailView):
         io = BytesIO()
         qr_img.save(io, format='png')
         context['vote_url'] = vote_url
+        context['vote_redir_url'] = self.request.build_absolute_uri(reverse('vote-redirect'))
         context['vote_url_qr_image'] = 'data:image/png;base64,%s' % base64.b64encode(io.getvalue()).decode('ascii')
         return context
 
@@ -118,8 +119,15 @@ class RoundResultsView(DetailView):
             detail_entry['rank'] = votes_to_rank.get(detail_entry['votes'], None)
         detail.sort(key=lambda detail_entry: detail_entry['votes'], reverse=True)
 
-
         return {
             'n_votes': round.votes.count(),
             'detail': detail,
         }
+
+
+class VoteRedirectView(View):
+    def get(self, request, *args, **kwargs):
+        voting_round = Round.objects.filter(accepting_votes=True).first()
+        if not voting_round:
+            return HttpResponse('No round is accepting votes at present. Try again soon.')
+        return HttpResponseRedirect(reverse('round-vote', kwargs={'slug': voting_round.slug}))

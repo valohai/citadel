@@ -45,13 +45,14 @@ iframe {
     position: fixed;
     right: 2vw;
     bottom: 2vw;
-    width: 20vw;
-    max-width: 250px;
-    font-size: 30px;
+    font-size: 35px;
     text-align: right;
     background: #fff;
 }
 
 #vote-url img {
     width: 100%;
+    max-width: 150px;
+    display: block;
+    margin-bottom: 0.5em;
 }
