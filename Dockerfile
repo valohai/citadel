@@ -7,7 +7,5 @@ ADD requirements.txt /home/citadel
 RUN pip install --user -r requirements.txt && rm -r /home/citadel/.cache
 ADD . /home/citadel
 ENV VAR_ROOT /data
-CMD \
-    python manage.py migrate && \
-    python manage.py collectstatic --noinput && \
-    /home/citadel/.local/bin/gunicorn citadel.wsgi -b 0:8000 -w 5
+ENV PORT 8000
+CMD /home/citadel/run-gunicorn.sh
