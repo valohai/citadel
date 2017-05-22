@@ -32,6 +32,7 @@ class RoundAdmin(admin.ModelAdmin):
         'accepting_votes',
         'editor_url',
         'show_url',
+        'timer_url',
         'vote_url',
         'results_url',
     )
@@ -45,6 +46,12 @@ class RoundAdmin(admin.ModelAdmin):
     def editor_url(self, instance):
         if instance.accepting_entries:
             url = reverse('round-editor', kwargs={'slug': instance.slug})
+            return format_link(url)
+        return ''
+
+    def timer_url(self, instance):
+        if instance.accepting_entries:
+            url = reverse('round-timer', kwargs={'pk': instance.pk})
             return format_link(url)
         return ''
 

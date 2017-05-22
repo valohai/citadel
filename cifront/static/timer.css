@@ -1,0 +1,32 @@
+#timer-controls {
+    position: fixed;
+    left: 5px;
+    bottom: 5px;
+    opacity: 0.1;
+}
+
+#timer-controls:hover {
+    opacity: 1;
+}
+
+body.out-of-time {
+    animation: awooga 1s infinite;
+}
+
+@keyframes awooga {
+    0% {
+        background: firebrick;
+    }
+    100% {
+        background: black;
+    }
+}
+
+body.out-of-time #timer-output {
+    color: yellow;
+}
+
+#timer-output {
+    font: 9vw Fira Code, monospace;
+}
+

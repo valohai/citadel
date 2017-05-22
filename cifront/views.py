@@ -2,6 +2,7 @@ from datetime import timedelta
 
 import jwt
 from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.http.response import HttpResponseNotFound, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
@@ -82,3 +83,24 @@ class RoundSaveView(DetailView):
             nonce=token['nonce'],
         )
         return JsonResponse({'id': entry.id}, status=201)
+
+
+class RoundTimerView(LoginRequiredMixin, DetailView):
+    model = Round
+    template_name = 'timer.html'
+    context_object_name = 'round'
+    queryset = Round.objects.filter(is_visible=True)
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if not self.object.accepting_entries:
+            return HttpResponseNotFound('Sorry! This round is not accepting entries at present.')
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
+
+    def get_context_data(self, **kwargs):
+        context = super(RoundTimerView, self).get_context_data(**kwargs)
+        context['edit_url'] = self.request.build_absolute_uri(
+            reverse('round-editor', kwargs={'slug': self.object.slug}),
+        )
+        return context

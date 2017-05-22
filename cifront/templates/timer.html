@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Code in the Dark – {{ round.name }}</title>
+    <link rel="stylesheet" href="{% static "generic.css" %}">
+    <link rel="stylesheet" href="{% static "timer.css" %}">
+</head>
+<body>
+<h2>
+    {{ round.event }}
+</h2>
+<h1>
+    Round {{ round.number }}:
+    {{ round.name }}
+</h1>
+<p style="font-size: 1.5em">
+    Contestants:
+    <br><b>{{ edit_url }}</b>
+</p>
+<div id="timer-output"></div>
+<div id="timer-controls">
+    <input type="number" value="900" id="seconds">
+    <input type="checkbox" id="running">
+</div>
+<script src="{% static "timer.js" %}"></script>
+</body>
+</html>
