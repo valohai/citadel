@@ -34,6 +34,7 @@ iframe {
     line-height: 1;
     font-size: 80px;
     color: orangered;
+    text-shadow: 4px 4px 5px rgba(0, 0, 0, 0.39);
     font-weight: bold;
 }
 #contestant:hover {
@@ -47,7 +48,6 @@ iframe {
     bottom: 2vw;
     font-size: 35px;
     text-align: right;
-    background: #fff;
 }
 
 #vote-url img {
@@ -55,4 +55,11 @@ iframe {
     max-width: 150px;
     display: block;
     margin-bottom: 0.5em;
+}
+
+#vote-url span {
+    background: rgba(255, 255, 255, 0.8);
+    color: #000;
+    display: block;
+    padding: 0.25em;
 }
