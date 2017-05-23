@@ -78,7 +78,6 @@ class EntryAdmin(admin.ModelAdmin):
     readonly_fields = (
         'round',
         'id',
-        'contestant_name',
         'code',
     )
     list_display = (
