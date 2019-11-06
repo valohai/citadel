@@ -29,6 +29,21 @@ const EXCLAMATIONS = [
   "Awesome!"
 ];
 
+function setupAce() {
+  const editor = ace.edit("editor");
+
+  editor.setShowPrintMargin(false);
+  editor.setHighlightActiveLine(false);
+  editor.setFontSize(20);
+  editor.setTheme("ace/theme/vibrant_ink");
+  editor.getSession().setMode("ace/mode/html");
+  editor.session.setOption("useWorker", false);
+  editor.session.setFoldStyle("manual");
+  editor.$blockScrolling = Infinity;
+
+  return editor;
+}
+
 class App {
   constructor() {
     this.currentStreak = 0;
@@ -54,7 +69,7 @@ class App {
       trailing: false
     });
 
-    this.editor = this.setupAce();
+    this.editor = setupAce();
     this.loadContent();
     this.editor.focus();
 
@@ -71,24 +86,9 @@ class App {
 
     this.getName();
 
-    if (typeof window.requestAnimationFrame === "function") {
+    if (window.requestAnimationFrame) {
       window.requestAnimationFrame(this.onFrame);
     }
-  }
-
-  setupAce() {
-    const editor = ace.edit("editor");
-
-    editor.setShowPrintMargin(false);
-    editor.setHighlightActiveLine(false);
-    editor.setFontSize(20);
-    editor.setTheme("ace/theme/vibrant_ink");
-    editor.getSession().setMode("ace/mode/html");
-    editor.session.setOption("useWorker", false);
-    editor.session.setFoldStyle("manual");
-    editor.$blockScrolling = Infinity;
-
-    return editor;
   }
 
   getName(forceUpdate) {
@@ -109,16 +109,16 @@ class App {
   }
 
   saveContent = () => {
-    window.localStorage[
-      window.STORAGE_ID || "content"
-    ] = this.editor.getValue();
+    const content = this.editor.getValue();
+    window.localStorage[window.STORAGE_ID || "content"] = content;
   };
 
   onFrame = time => {
     this.particleHandler.drawParticles(time - this.lastDraw);
     this.lastDraw = time;
-    if (window.requestAnimationFrame)
+    if (window.requestAnimationFrame) {
       window.requestAnimationFrame(this.onFrame);
+    }
   };
 
   increaseStreak() {
