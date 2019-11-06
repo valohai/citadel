@@ -5,6 +5,7 @@ from io import BytesIO
 import qrcode
 import ulid2
 from django.db.models import Count
+from django.http import HttpResponseNotFound
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.views import View
@@ -36,7 +37,7 @@ class RoundShowView(DetailView):
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         if self.object.accepting_entries:
-            return HttpResponse('Show mode is not available when the round is still accepting entries')
+            return HttpResponseNotFound('Show mode is not available when the round is still accepting entries')
         entry_id = request.GET.get('entry')
         if entry_id:
             entry = self.object.entries.get(id=entry_id)

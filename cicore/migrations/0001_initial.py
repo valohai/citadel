@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Asset',
             fields=[
-                ('id', models.UUIDField(default=ulid2.generate_ulid_as_uuid, primary_key=True, serialize=False)),
+                ('id', models.UUIDField(default=ulid2.generate_ulid_as_uuid, primary_key=True, serialize=False, editable=False)),
                 ('ctime', models.DateTimeField(auto_now_add=True)),
                 ('name', models.CharField(max_length=128)),
                 ('file', models.FileField(upload_to='rounds/assets')),
@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Entry',
             fields=[
-                ('id', models.UUIDField(default=ulid2.generate_ulid_as_uuid, primary_key=True, serialize=False)),
+                ('id', models.UUIDField(default=ulid2.generate_ulid_as_uuid, primary_key=True, serialize=False, editable=False)),
                 ('ctime', models.DateTimeField(auto_now_add=True)),
                 ('contestant_name', models.CharField(max_length=128)),
                 ('code', models.TextField()),
@@ -36,15 +36,18 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Event',
             fields=[
-                ('id', models.UUIDField(default=ulid2.generate_ulid_as_uuid, primary_key=True, serialize=False)),
+                ('id', models.UUIDField(default=ulid2.generate_ulid_as_uuid, primary_key=True, serialize=False, editable=False)),
                 ('ctime', models.DateTimeField(auto_now_add=True)),
                 ('name', models.CharField(max_length=128)),
             ],
+            options={
+                'verbose_name_plural': 'entries',
+            },
         ),
         migrations.CreateModel(
             name='Round',
             fields=[
-                ('id', models.UUIDField(default=ulid2.generate_ulid_as_uuid, primary_key=True, serialize=False)),
+                ('id', models.UUIDField(default=ulid2.generate_ulid_as_uuid, primary_key=True, serialize=False, editable=False)),
                 ('ctime', models.DateTimeField(auto_now_add=True)),
                 ('number', models.PositiveIntegerField()),
                 ('name', models.CharField(max_length=128)),

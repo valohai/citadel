@@ -11,10 +11,12 @@
 </head>
 <body>
 <header>
-    <a href="#"
-       onclick="showScreenshot('{{ round.screenshot.url }}')">
-        (Screenshot)
-    </a>
+    {% if round.screenshot %}
+        <a href="#"
+           onclick="showScreenshot('{{ round.screenshot.url }}')">
+            (Screenshot)
+        </a>
+    {% endif %}
     {% for entry in round.entries.all %}
         <a href="#"
            onclick="showEntry('{{ entry.contestant_name|escapejs }}', '{{ entry.id }}')">
