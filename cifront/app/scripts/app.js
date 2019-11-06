@@ -4,7 +4,6 @@ import $ from "jquery";
 import ace from "brace";
 import "brace/mode/html";
 import "brace/theme/vibrant_ink";
-import "brace/ext/searchbox";
 import { ParticleHandler } from "./particles";
 
 const POWER_MODE_ACTIVATION_THRESHOLD = 200;
