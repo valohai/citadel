@@ -40,6 +40,9 @@ class Migration(migrations.Migration):
                 ('ctime', models.DateTimeField(auto_now_add=True)),
                 ('name', models.CharField(max_length=128)),
             ],
+            options={
+                'verbose_name_plural': 'entries',
+            },
         ),
         migrations.CreateModel(
             name='Round',

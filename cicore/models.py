@@ -63,3 +63,6 @@ class Entry(models.Model):
     contestant_name = models.CharField(max_length=128)
     nonce = models.CharField(max_length=64, unique=True, editable=False)
     code = models.TextField()
+
+    class Meta:
+        verbose_name_plural = 'entries'
