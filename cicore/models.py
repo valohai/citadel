@@ -17,7 +17,7 @@ class Round(models.Model):
     id = models.UUIDField(primary_key=True, default=ulid2.generate_ulid_as_uuid)
     slug = models.SlugField(max_length=64, unique=True)
     ctime = models.DateTimeField(auto_now_add=True, editable=False)
-    event = models.ForeignKey(Event, related_name='rounds')
+    event = models.ForeignKey(Event, related_name='rounds', on_delete=models.CASCADE)
     number = models.PositiveIntegerField()
     name = models.CharField(max_length=128)
     screenshot = models.ImageField(upload_to='rounds', blank=True)
@@ -36,7 +36,7 @@ class Round(models.Model):
 class Asset(models.Model):
     id = models.UUIDField(primary_key=True, default=ulid2.generate_ulid_as_uuid)
     ctime = models.DateTimeField(auto_now_add=True, editable=False)
-    round = models.ForeignKey(Round, related_name='assets')
+    round = models.ForeignKey(Round, related_name='assets', on_delete=models.CASCADE)
     name = models.CharField(max_length=128)
     file = models.FileField(upload_to='rounds/assets')
     description = models.TextField(blank=True)
@@ -59,7 +59,7 @@ class Asset(models.Model):
 class Entry(models.Model):
     id = models.UUIDField(primary_key=True, default=ulid2.generate_ulid_as_uuid)
     ctime = models.DateTimeField(auto_now_add=True, editable=False)
-    round = models.ForeignKey(Round, related_name='entries')
+    round = models.ForeignKey(Round, related_name='entries', on_delete=models.CASCADE)
     contestant_name = models.CharField(max_length=128)
     nonce = models.CharField(max_length=64, unique=True, editable=False)
     code = models.TextField()
