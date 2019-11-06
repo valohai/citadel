@@ -2,7 +2,6 @@ django
 django-environ
 django-ipware
 Pillow
-pip-tools
 PyJWT
 qrcode
 ranking
