@@ -1,89 +1,68 @@
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * DS205: Consider reworking code to avoid use of IIFEs
- * DS206: Consider reworking classes to avoid initClass
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
 import "../styles/index.scss";
-import _ from "underscore";
+import { debounce, throttle, defer, sample } from "lodash";
 import $ from "jquery";
 import ace from "brace";
 import "brace/mode/html";
 import "brace/theme/vibrant_ink";
 import "brace/ext/searchbox";
 
+const POWER_MODE_ACTIVATION_THRESHOLD = 200;
+const STREAK_TIMEOUT = 10 * 1000;
+
+const MAX_PARTICLES = 500;
+const PARTICLE_NUM_RANGE = [5, 6, 7, 8, 9, 10, 11, 12];
+const PARTICLE_GRAVITY = 0.075;
+const PARTICLE_SIZE = 8;
+const PARTICLE_ALPHA_FADEOUT = 0.96;
+const PARTICLE_VELOCITY_RANGE = {
+  x: [-2.5, 2.5],
+  y: [-7, -3.5]
+};
+
+const PARTICLE_COLORS = {
+  text: [255, 255, 255],
+  "text.xml": [255, 255, 255],
+  keyword: [0, 221, 255],
+  variable: [0, 221, 255],
+  "meta.tag.tag-name.xml": [0, 221, 255],
+  "keyword.operator.attribute-equals.xml": [0, 221, 255],
+  constant: [249, 255, 0],
+  "constant.numeric": [249, 255, 0],
+  "support.constant": [249, 255, 0],
+  "string.attribute-value.xml": [249, 255, 0],
+  "string.unquoted.attribute-value.html": [249, 255, 0],
+  "entity.other.attribute-name.xml": [129, 148, 244],
+  comment: [0, 255, 121],
+  "comment.xml": [0, 255, 121]
+};
+
+const EXCLAMATION_EVERY = 10;
+const EXCLAMATIONS = [
+  "Super!",
+  "Radical!",
+  "Fantastic!",
+  "Great!",
+  "OMG",
+  "Whoah!",
+  ":O",
+  "Nice!",
+  "Splendid!",
+  "Wild!",
+  "Grand!",
+  "Impressive!",
+  "Stupendous!",
+  "Extreme!",
+  "Awesome!"
+];
+
 class App {
-  static initClass() {
-    this.prototype.POWER_MODE_ACTIVATION_THRESHOLD = 200;
-    this.prototype.STREAK_TIMEOUT = 10 * 1000;
-
-    this.prototype.MAX_PARTICLES = 500;
-    this.prototype.PARTICLE_NUM_RANGE = [5, 6, 7, 8, 9, 10, 11, 12];
-    this.prototype.PARTICLE_GRAVITY = 0.075;
-    this.prototype.PARTICLE_SIZE = 8;
-    this.prototype.PARTICLE_ALPHA_FADEOUT = 0.96;
-    this.prototype.PARTICLE_VELOCITY_RANGE = {
-      x: [-2.5, 2.5],
-      y: [-7, -3.5]
-    };
-
-    this.prototype.PARTICLE_COLORS = {
-      text: [255, 255, 255],
-      "text.xml": [255, 255, 255],
-      keyword: [0, 221, 255],
-      variable: [0, 221, 255],
-      "meta.tag.tag-name.xml": [0, 221, 255],
-      "keyword.operator.attribute-equals.xml": [0, 221, 255],
-      constant: [249, 255, 0],
-      "constant.numeric": [249, 255, 0],
-      "support.constant": [249, 255, 0],
-      "string.attribute-value.xml": [249, 255, 0],
-      "string.unquoted.attribute-value.html": [249, 255, 0],
-      "entity.other.attribute-name.xml": [129, 148, 244],
-      comment: [0, 255, 121],
-      "comment.xml": [0, 255, 121]
-    };
-
-    this.prototype.EXCLAMATION_EVERY = 10;
-    this.prototype.EXCLAMATIONS = [
-      "Super!",
-      "Radical!",
-      "Fantastic!",
-      "Great!",
-      "OMG",
-      "Whoah!",
-      ":O",
-      "Nice!",
-      "Splendid!",
-      "Wild!",
-      "Grand!",
-      "Impressive!",
-      "Stupendous!",
-      "Extreme!",
-      "Awesome!"
-    ];
-
-    this.prototype.currentStreak = 0;
-    this.prototype.powerMode = false;
-    this.prototype.particles = [];
-    this.prototype.particlePointer = 0;
-    this.prototype.lastDraw = 0;
-  }
-
   constructor() {
-    this.saveContent = this.saveContent.bind(this);
-    this.onFrame = this.onFrame.bind(this);
-    this.drawParticles = this.drawParticles.bind(this);
-    this.activatePowerMode = this.activatePowerMode.bind(this);
-    this.deactivatePowerMode = this.deactivatePowerMode.bind(this);
-    this.onClickInstructions = this.onClickInstructions.bind(this);
-    this.onClickReference = this.onClickReference.bind(this);
-    this.onClickFinish = this.onClickFinish.bind(this);
-    this.onChange = this.onChange.bind(this);
-    this.trySaveCode = this.trySaveCode.bind(this);
+    this.currentStreak = 0;
+    this.powerMode = false;
+    this.particles = [];
+    this.particlePointer = 0;
+    this.lastDraw = 0;
+
     this.$streakCounter = $(".streak-container .counter");
     this.$streakBar = $(".streak-container .bar");
     this.$exclamations = $(".streak-container .exclamations");
@@ -97,10 +76,10 @@ class App {
 
     this.$body = $("body");
 
-    this.debouncedSaveContent = _.debounce(this.saveContent, 300);
-    this.debouncedEndStreak = _.debounce(this.endStreak, this.STREAK_TIMEOUT);
-    this.throttledShake = _.throttle(this.shake, 100, { trailing: false });
-    this.throttledSpawnParticles = _.throttle(this.spawnParticles, 25, {
+    this.debouncedSaveContent = debounce(this.saveContent, 300);
+    this.debouncedEndStreak = debounce(this.endStreak, STREAK_TIMEOUT);
+    this.throttledShake = throttle(this.shake, 100, { trailing: false });
+    this.throttledSpawnParticles = throttle(this.spawnParticles, 25, {
       trailing: false
     });
 
@@ -153,64 +132,61 @@ class App {
       (!forceUpdate && localStorage["name"]) || prompt("What's your name?");
     localStorage["name"] = name;
     if (name) {
-      return this.$nameTag.text(name);
+      this.$nameTag.text(name);
     }
   }
 
   loadContent() {
     let content;
-    if (!(content = localStorage[window.STORAGE_ID || "content"])) {
+    if (!(content = window.localStorage[window.STORAGE_ID || "content"])) {
       return;
     }
-    return this.editor.setValue(content, -1);
+    this.editor.setValue(content, -1);
   }
 
-  saveContent() {
-    return (localStorage[
+  saveContent = () => {
+    window.localStorage[
       window.STORAGE_ID || "content"
-    ] = this.editor.getValue());
-  }
+    ] = this.editor.getValue();
+  };
 
-  onFrame(time) {
+  onFrame = time => {
     this.drawParticles(time - this.lastDraw);
     this.lastDraw = time;
-    return typeof window.requestAnimationFrame === "function"
-      ? window.requestAnimationFrame(this.onFrame)
-      : undefined;
-  }
+    if (window.requestAnimationFrame) window.requestAnimationFrame(this.onFrame);
+  };
 
   increaseStreak() {
     this.currentStreak++;
     if (
       this.currentStreak > 0 &&
-      this.currentStreak % this.EXCLAMATION_EVERY === 0
+      this.currentStreak % EXCLAMATION_EVERY === 0
     ) {
       this.showExclamation();
     }
 
     if (
-      this.currentStreak >= this.POWER_MODE_ACTIVATION_THRESHOLD &&
+      this.currentStreak >= POWER_MODE_ACTIVATION_THRESHOLD &&
       !this.powerMode
     ) {
       this.activatePowerMode();
     }
 
     this.refreshStreakBar();
-
-    return this.renderStreak();
+    this.renderStreak();
   }
 
   endStreak() {
     this.currentStreak = 0;
     this.renderStreak();
-    return this.deactivatePowerMode();
+    this.deactivatePowerMode();
   }
 
   renderStreak() {
     this.$streakCounter.text(this.currentStreak).removeClass("bump");
 
-    return _.defer(() => {
-      return this.$streakCounter.addClass("bump");
+    defer(() => {
+      this.$streakCounter.addClass("bump");
     });
   }
 
@@ -221,11 +197,11 @@ class App {
       transition: "none"
     });
 
-    return _.defer(() => {
-      return this.$streakBar.css({
+    defer(() => {
+      this.$streakBar.css({
         "webkit-transform": "",
         transform: "",
-        transition: `all ${this.STREAK_TIMEOUT}ms linear`
+        transition: `all ${STREAK_TIMEOUT}ms linear`
       });
     });
   }
@@ -233,10 +209,10 @@ class App {
   showExclamation() {
     const $exclamation = $("<span>")
       .addClass("exclamation")
-      .text(_.sample(this.EXCLAMATIONS));
+      .text(sample(EXCLAMATIONS));
 
     this.$exclamations.prepend($exclamation);
-    return setTimeout(() => $exclamation.remove(), 3000);
+    setTimeout(() => $exclamation.remove(), 3000);
   }
 
   getCursorPosition() {
@@ -252,17 +228,16 @@ class App {
     }
 
     const { x, y } = this.getCursorPosition();
-    const numParticles = _(this.PARTICLE_NUM_RANGE).sample();
+    const numParticles = sample(PARTICLE_NUM_RANGE);
     const color = this.getParticleColor(type);
-    return _(numParticles).times(() => {
+    for (let i = 0; i < numParticles; i++) {
       this.particles[this.particlePointer] = this.createParticle(x, y, color);
-      return (this.particlePointer =
-        (this.particlePointer + 1) % this.MAX_PARTICLES);
-    });
+      this.particlePointer = (this.particlePointer + 1) % MAX_PARTICLES;
+    }
   }
 
   getParticleColor(type) {
-    return this.PARTICLE_COLORS[type] || [255, 255, 255];
+    return PARTICLE_COLORS[type] || [255, 255, 255];
   }
 
   createParticle(x, y, color) {
@@ -273,49 +248,45 @@ class App {
       color,
       velocity: {
         x:
-          this.PARTICLE_VELOCITY_RANGE.x[0] +
+          PARTICLE_VELOCITY_RANGE.x[0] +
           Math.random() *
-            (this.PARTICLE_VELOCITY_RANGE.x[1] -
-              this.PARTICLE_VELOCITY_RANGE.x[0]),
+            (PARTICLE_VELOCITY_RANGE.x[1] - PARTICLE_VELOCITY_RANGE.x[0]),
         y:
-          this.PARTICLE_VELOCITY_RANGE.y[0] +
+          PARTICLE_VELOCITY_RANGE.y[0] +
           Math.random() *
-            (this.PARTICLE_VELOCITY_RANGE.y[1] -
-              this.PARTICLE_VELOCITY_RANGE.y[0])
+            (PARTICLE_VELOCITY_RANGE.y[1] - PARTICLE_VELOCITY_RANGE.y[0])
       }
     };
   }
 
-  drawParticles(timeDelta) {
+  drawParticles = timeDelta => {
     this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-    return (() => {
-      const result = [];
-      for (let particle of Array.from(this.particles)) {
-        if (particle.alpha <= 0.1) {
-          continue;
-        }
-
-        particle.velocity.y += this.PARTICLE_GRAVITY;
-        particle.x += particle.velocity.x;
-        particle.y += particle.velocity.y;
-        particle.alpha *= this.PARTICLE_ALPHA_FADEOUT;
-
-        this.canvasContext.fillStyle = `rgba(${particle.color.join(", ")}, ${
-          particle.alpha
-        })`;
-        result.push(
-          this.canvasContext.fillRect(
-            Math.round(particle.x - this.PARTICLE_SIZE / 2),
-            Math.round(particle.y - this.PARTICLE_SIZE / 2),
-            this.PARTICLE_SIZE,
-            this.PARTICLE_SIZE
-          )
-        );
+    const result = [];
+    this.particles.forEach(particle => {
+      if (particle.alpha <= 0.1) {
+        return;
       }
-      return result;
-    })();
-  }
+
+      particle.velocity.y += PARTICLE_GRAVITY;
+      particle.x += particle.velocity.x;
+      particle.y += particle.velocity.y;
+      particle.alpha *= PARTICLE_ALPHA_FADEOUT;
+
+      this.canvasContext.fillStyle = `rgba(${particle.color.join(", ")}, ${
+        particle.alpha
+      })`;
+      result.push(
+        this.canvasContext.fillRect(
+          Math.round(particle.x - PARTICLE_SIZE / 2),
+          Math.round(particle.y - PARTICLE_SIZE / 2),
+          PARTICLE_SIZE,
+          PARTICLE_SIZE
+        )
+      );
+    });
+    return result;
+  };
 
   shake() {
     if (!this.powerMode) {
@@ -327,55 +298,60 @@ class App {
       2 *
         Math.random() *
         Math.floor(
-          (this.currentStreak - this.POWER_MODE_ACTIVATION_THRESHOLD) / 100
+          (this.currentStreak - POWER_MODE_ACTIVATION_THRESHOLD) / 100
         );
     const x = intensity * (Math.random() > 0.5 ? -1 : 1);
     const y = intensity * (Math.random() > 0.5 ? -1 : 1);
 
     this.$editor.css("margin", `${y}px ${x}px`);
 
-    return setTimeout(() => {
-      return this.$editor.css("margin", "");
+    setTimeout(() => {
+      this.$editor.css("margin", "");
     }, 75);
   }
 
-  activatePowerMode() {
+  activatePowerMode = () => {
     this.powerMode = true;
-    return this.$body.addClass("power-mode");
-  }
+    this.$body.addClass("power-mode");
+  };
 
-  deactivatePowerMode() {
+  deactivatePowerMode = () => {
     this.powerMode = false;
-    return this.$body.removeClass("power-mode");
-  }
+    this.$body.removeClass("power-mode");
+  };
 
-  onClickInstructions() {
-    $("body").toggleClass("show-instructions");
-    if (!$("body").hasClass("show-instructions")) {
-      return this.editor.focus();
+  onClickInstructions = () => {
+    const $body = $("body");
+    $body.toggleClass("show-instructions");
+    if (!$body.hasClass("show-instructions")) {
+      this.editor.focus();
     }
-  }
+  };
 
-  onClickReference() {
+  onClickReference = () => {
     this.$reference.toggleClass("active");
     if (!this.$reference.hasClass("active")) {
-      return this.editor.focus();
+      this.editor.focus();
     }
-  }
+  };
 
-  onClickFinish() {
+  onClickFinish = () => {
     const confirm = prompt(`\
 This will show the results of your code. Doing this before the round is over \
 WILL DISQUALIFY YOU. Are you sure you want to proceed? Type \"yes\" to confirm.\
 `);
-
-    if ((confirm != null ? confirm.toLowerCase() : undefined) === "yes") {
-      const code = this.editor.getValue();
-      this.trySaveCode(code);
-      this.$result[0].contentWindow.postMessage(code, "*");
-      return this.$result.show();
+    if (!confirm) {
+      return;
     }
-  }
+
+    if (confirm.toLowerCase() !== "yes") {
+      return;
+    }
+    const code = this.editor.getValue();
+    this.trySaveCode(code);
+    this.$result[0].contentWindow.postMessage(code, "*");
+    this.$result.show();
+  };
 
   onChange = event => {
     this.debouncedSaveContent();
@@ -391,14 +367,14 @@ WILL DISQUALIFY YOU. Are you sure you want to proceed? Type \"yes\" to confirm.\
 
     const token = this.editor.session.getTokenAt(pos.row, pos.column);
 
-    return _.defer(() => {
+    defer(() => {
       if (token) {
-        return this.throttledSpawnParticles(token.type);
+        this.throttledSpawnParticles(token.type);
       }
     });
   };
 
-  trySaveCode(code) {
+  trySaveCode = code => {
     if (!window.SAVE_URL) {
       return;
     }
@@ -412,12 +388,11 @@ WILL DISQUALIFY YOU. Are you sure you want to proceed? Type \"yes\" to confirm.\
       },
       complete: (xhr, status) => {
         if (status !== "success") {
-          return alert(`Uploading your code failed (status: ${status})`);
+          alert(`Uploading your code failed (status: ${status})`);
         }
       }
     });
-  }
+  };
 }
-App.initClass();
 
 $(() => new App());
