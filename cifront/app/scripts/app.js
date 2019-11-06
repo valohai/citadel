@@ -128,17 +128,17 @@ class App {
   }
 
   getName(forceUpdate) {
-    const name =
-      (!forceUpdate && localStorage["name"]) || prompt("What's your name?");
-    localStorage["name"] = name;
+    let { name } = localStorage;
+    if (!name || forceUpdate) name = prompt("What's your name?");
+    localStorage.name = name;
     if (name) {
       this.$nameTag.text(name);
     }
   }
 
   loadContent() {
-    let content;
-    if (!(content = window.localStorage[window.STORAGE_ID || "content"])) {
+    const content = window.localStorage[window.STORAGE_ID || "content"];
+    if (!content) {
       return;
     }
     this.editor.setValue(content, -1);
@@ -259,7 +259,7 @@ class App {
     };
   }
 
-  drawParticles = timeDelta => {
+  drawParticles = () => {
     this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     const result = [];
@@ -336,9 +336,9 @@ class App {
   };
 
   onClickFinish = () => {
-    const confirm = prompt(`\
-This will show the results of your code. Doing this before the round is over \
-WILL DISQUALIFY YOU. Are you sure you want to proceed? Type \"yes\" to confirm.\
+    const confirm = prompt(`
+This will show the results of your code. Doing this before the round is over 
+WILL DISQUALIFY YOU. Are you sure you want to proceed? Type "yes" to confirm.
 `);
     if (!confirm) {
       return;
@@ -376,7 +376,7 @@ WILL DISQUALIFY YOU. Are you sure you want to proceed? Type \"yes\" to confirm.\
 
   trySaveCode = code => {
     if (!window.SAVE_URL) {
-      return;
+      return null;
     }
     return $.ajax({
       type: "POST",
@@ -384,7 +384,7 @@ WILL DISQUALIFY YOU. Are you sure you want to proceed? Type \"yes\" to confirm.\
       data: {
         token: window.SAVE_TOKEN || "",
         code,
-        author: localStorage["name"] || ""
+        author: localStorage.name || ""
       },
       complete: (xhr, status) => {
         if (status !== "success") {
