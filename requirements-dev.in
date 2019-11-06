@@ -1,6 +1,7 @@
 -r ./requirements.in
 black
+flake8
 pip-tools
 pytest
-pytest-django
 pytest-cov
+pytest-django
