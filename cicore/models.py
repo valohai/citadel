@@ -5,7 +5,7 @@ from django.utils.functional import cached_property
 
 
 class Event(models.Model):
-    id = models.UUIDField(primary_key=True, default=ulid2.generate_ulid_as_uuid)
+    id = models.UUIDField(primary_key=True, default=ulid2.generate_ulid_as_uuid, editable=False)
     ctime = models.DateTimeField(auto_now_add=True, editable=False)
     name = models.CharField(max_length=128)
 
@@ -14,7 +14,7 @@ class Event(models.Model):
 
 
 class Round(models.Model):
-    id = models.UUIDField(primary_key=True, default=ulid2.generate_ulid_as_uuid)
+    id = models.UUIDField(primary_key=True, default=ulid2.generate_ulid_as_uuid, editable=False)
     slug = models.SlugField(max_length=64, unique=True)
     ctime = models.DateTimeField(auto_now_add=True, editable=False)
     event = models.ForeignKey(Event, related_name='rounds', on_delete=models.CASCADE)
@@ -34,7 +34,7 @@ class Round(models.Model):
 
 
 class Asset(models.Model):
-    id = models.UUIDField(primary_key=True, default=ulid2.generate_ulid_as_uuid)
+    id = models.UUIDField(primary_key=True, default=ulid2.generate_ulid_as_uuid, editable=False)
     ctime = models.DateTimeField(auto_now_add=True, editable=False)
     round = models.ForeignKey(Round, related_name='assets', on_delete=models.CASCADE)
     name = models.CharField(max_length=128)
@@ -57,7 +57,7 @@ class Asset(models.Model):
 
 
 class Entry(models.Model):
-    id = models.UUIDField(primary_key=True, default=ulid2.generate_ulid_as_uuid)
+    id = models.UUIDField(primary_key=True, default=ulid2.generate_ulid_as_uuid, editable=False)
     ctime = models.DateTimeField(auto_now_add=True, editable=False)
     round = models.ForeignKey(Round, related_name='entries', on_delete=models.CASCADE)
     contestant_name = models.CharField(max_length=128)
