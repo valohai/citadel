@@ -377,9 +377,9 @@ WILL DISQUALIFY YOU. Are you sure you want to proceed? Type \"yes\" to confirm.\
     }
   }
 
-  onChange(e) {
+  onChange = event => {
     this.debouncedSaveContent();
-    const insertTextAction = e.data.action === "insertText";
+    const insertTextAction = event.action === "insert";
     if (insertTextAction) {
       this.increaseStreak();
       this.debouncedEndStreak();
@@ -387,8 +387,7 @@ WILL DISQUALIFY YOU. Are you sure you want to proceed? Type \"yes\" to confirm.\
 
     this.throttledShake();
 
-    const { range } = e.data;
-    const pos = insertTextAction ? range.end : range.start;
+    const pos = insertTextAction ? event.end : event.start;
 
     const token = this.editor.session.getTokenAt(pos.row, pos.column);
 
@@ -397,7 +396,7 @@ WILL DISQUALIFY YOU. Are you sure you want to proceed? Type \"yes\" to confirm.\
         return this.throttledSpawnParticles(token.type);
       }
     });
-  }
+  };
 
   trySaveCode(code) {
     if (!window.SAVE_URL) {

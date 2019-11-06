@@ -1100,12 +1100,10 @@ brace-expansion@^1.1.7:
     balanced-match "^1.0.0"
     concat-map "0.0.1"
 
-brace@^0.5.0:
-  version "0.5.1"
-  resolved "https://registry.yarnpkg.com/brace/-/brace-0.5.1.tgz#7fc7d5cf4a5b9892974b05a5e77fa125a68a3a28"
-  integrity sha1-f8fVz0pbmJKXSwWl53+hJaaKOig=
-  dependencies:
-    w3c-blob "0.0.1"
+brace@^0.11.1:
+  version "0.11.1"
+  resolved "https://registry.yarnpkg.com/brace/-/brace-0.11.1.tgz#4896fcc9d544eef45f4bb7660db320d3b379fe58"
+  integrity sha1-SJb8ydVE7vRfS7dmDbMg07N5/lg=
 
 braces@^2.3.1, braces@^2.3.2:
   version "2.3.2"
@@ -4755,11 +4753,6 @@ vm-browserify@^1.0.1:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-1.1.2.tgz#78641c488b8e6ca91a75f511e7a3b32a86e5dda0"
   integrity sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==
-
-w3c-blob@0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/w3c-blob/-/w3c-blob-0.0.1.tgz#b0cd352a1a50f515563420ffd5861f950f1d85b8"
-  integrity sha1-sM01KhpQ9RVWNCD/1YYflQ8dhbg=
 
 watchpack@^1.6.0:
   version "1.6.0"
