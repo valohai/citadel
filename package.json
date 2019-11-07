@@ -5,26 +5,38 @@
   "description": "",
   "author": "",
   "scripts": {
-    "dev": "webpack --watch --progress",
-    "build": "webpack -p --progress"
+    "dev": "webpack --mode=development --watch --progress",
+    "build": "webpack --mode=production --progress",
+    "lint": "eslint cifront/app/scripts",
+    "prettify": "prettier --write cifront/app/scripts/*.js"
   },
   "dependencies": {
-    "autoprefixer-core": "^6.0.1",
-    "brace": "^0.5.0",
-    "coffee-loader": "^0.7.2",
-    "coffee-script": "^1.9.1",
-    "css-loader": "^0.28.1",
-    "deep-extend": "^0.3.2",
-    "file-loader": "^0.11.1",
+    "brace": "^0.11.1",
     "jquery": "^3.2.1",
-    "merge-stream": "^1.0.0",
+    "lodash": "^4.17.15"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.7.0",
+    "@babel/plugin-proposal-class-properties": "^7.7.0",
+    "@babel/preset-env": "^7.7.1",
+    "autoprefixer": "^9.7.1",
+    "babel-eslint": "^10.0.3",
+    "babel-loader": "^8.0.6",
+    "css-loader": "^3.2.0",
+    "eslint": "^6.6.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "file-loader": "^4.2.0",
     "node-sass": "^4.5.2",
-    "postcss-loader": "^2.0.5",
-    "run-sequence": "^1.0.2",
-    "sass-loader": "^6.0.5",
-    "style-loader": "^0.17.0",
-    "underscore": "^1.8.2",
-    "url-loader": "^0.5.5",
-    "webpack": "^2.5.1"
-  }
+    "postcss-loader": "^3.0.0",
+    "sass-loader": "^8.0.0",
+    "style-loader": "^1.0.0",
+    "url-loader": "^2.2.0",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
+  },
+  "browserslist": [
+    "last 1 version",
+    "> 1%"
+  ]
 }

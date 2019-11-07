@@ -1,0 +1,21 @@
+name: Build and test JavaScript
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: borales/actions-yarn@v2.0.0
+      name: install
+      with:
+        cmd: install
+    - uses: borales/actions-yarn@v2.0.0
+      name: build
+      with:
+        cmd: build
+    - uses: borales/actions-yarn@v2.0.0
+      name: lint
+      with:
+        cmd: lint
