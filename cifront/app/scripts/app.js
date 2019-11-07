@@ -1,5 +1,8 @@
 import "../styles/index.scss";
-import { debounce, defer, sample, throttle } from "lodash";
+import debounce from "lodash/debounce";
+import defer from "lodash/defer";
+import sample from "lodash/sample";
+import throttle from "lodash/throttle";
 import $ from "jquery";
 import ace from "brace";
 import "brace/mode/html";

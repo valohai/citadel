@@ -1,4 +1,4 @@
-import { sample } from "lodash";
+import sample from "lodash/sample";
 
 const MAX_PARTICLES = 500;
 const PARTICLE_NUM_RANGE = [5, 6, 7, 8, 9, 10, 11, 12];
