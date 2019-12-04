@@ -12,12 +12,11 @@ click==7.0                # via black, pip-tools
 coverage==4.5.4           # via pytest-cov
 django-environ==0.4.5
 django-ipware==2.1.0
-django==2.2.7
+django==2.2.8
 entrypoints==0.3          # via flake8
 flake8==3.7.9
-importlib-metadata==0.23  # via pluggy, pytest
 mccabe==0.6.1             # via flake8
-more-itertools==7.2.0     # via pytest, zipp
+more-itertools==7.2.0     # via pytest
 packaging==19.2           # via pytest
 pathspec==0.6.0           # via black
 pillow==6.2.1
@@ -42,4 +41,3 @@ typed-ast==1.4.0          # via black
 ulid2==0.2.0
 wcwidth==0.1.7            # via pytest
 whitenoise==4.1.4
-zipp==0.6.0               # via importlib-metadata
