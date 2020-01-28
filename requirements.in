@@ -1,4 +1,4 @@
-django
+django<3.0
 django-environ
 django-ipware
 Pillow
