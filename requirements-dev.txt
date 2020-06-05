@@ -6,37 +6,37 @@
 #
 appdirs==1.4.3            # via black
 attrs==19.3.0             # via black, pytest
-black==19.10b0
+black==19.10b0            # via -r requirements-dev.in
 click==7.0                # via black, pip-tools
 coverage==5.0.3           # via pytest-cov
-django-environ==0.4.5
-django-ipware==2.1.0
-django==2.2.10
+django-environ==0.4.5     # via -r ./requirements.in
+django-ipware==2.1.0      # via -r ./requirements.in
+django==2.2.13            # via -r ./requirements.in
 entrypoints==0.3          # via flake8
-flake8==3.7.9
+flake8==3.7.9             # via -r requirements-dev.in
 mccabe==0.6.1             # via flake8
 more-itertools==8.1.0     # via pytest
 packaging==20.1           # via pytest
 pathspec==0.7.0           # via black
-pillow==7.0.0
-pip-tools==4.4.0
+pillow==7.0.0             # via -r ./requirements.in
+pip-tools==4.4.0          # via -r requirements-dev.in
 pluggy==0.13.1            # via pytest
 py==1.8.1                 # via pytest
 pycodestyle==2.5.0        # via flake8
 pyflakes==2.1.1           # via flake8
-pyjwt==1.7.1
+pyjwt==1.7.1              # via -r ./requirements.in
 pyparsing==2.4.6          # via packaging
-pytest-cov==2.8.1
-pytest-django==3.8.0
-pytest==5.3.4
+pytest-cov==2.8.1         # via -r requirements-dev.in
+pytest-django==3.8.0      # via -r requirements-dev.in
+pytest==5.3.4             # via -r requirements-dev.in, pytest-cov, pytest-django
 pytz==2019.3              # via django
-qrcode==6.1
-ranking==0.3.1
+qrcode==6.1               # via -r ./requirements.in
+ranking==0.3.1            # via -r ./requirements.in
 regex==2020.1.8           # via black
 six==1.14.0               # via packaging, pip-tools, qrcode
 sqlparse==0.3.0           # via django
 toml==0.10.0              # via black
 typed-ast==1.4.1          # via black
-ulid2==0.2.0
+ulid2==0.2.0              # via -r ./requirements.in
 wcwidth==0.1.8            # via pytest
-whitenoise==5.0.1
+whitenoise==5.0.1         # via -r ./requirements.in
