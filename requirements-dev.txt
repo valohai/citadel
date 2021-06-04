@@ -22,7 +22,7 @@ django-environ==0.4.5
     # via -r ./requirements.in
 django-ipware==2.1.0
     # via -r ./requirements.in
-django==2.2.10
+django==2.2.21
     # via -r ./requirements.in
 entrypoints==0.3
     # via flake8
