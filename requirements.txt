@@ -10,7 +10,7 @@ django-ipware==2.1.0
     # via -r requirements.in
 django==2.2.21
     # via -r requirements.in
-pillow==7.0.0
+pillow==8.2.0
     # via -r requirements.in
 pyjwt==1.7.1
     # via -r requirements.in
