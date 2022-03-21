@@ -6,16 +6,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - uses: borales/actions-yarn@v2.0.0
-      name: install
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
       with:
-        cmd: install
-    - uses: borales/actions-yarn@v2.0.0
-      name: build
-      with:
-        cmd: build
-    - uses: borales/actions-yarn@v2.0.0
-      name: lint
-      with:
-        cmd: lint
+        node-version: '16'
+        cache: 'yarn'
+    - run: yarn
+    - run: yarn build
+    - run: yarn lint
