@@ -10,14 +10,28 @@ from django.http.response import HttpResponse, HttpResponseNotFound, HttpRespons
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.encoding import force_str
+from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 from django.views.generic import DetailView
 
-from cicore.models import Asset, Entry, Round
+from cicore.models import Asset, Draft, Entry, Round
 from cicore.utils import make_qr_code_data_uri
+
+RULES_HTML = """
+<ol>
+    <li>No previews - of either results or assets!</li>
+    <li>Stay in this editor at all times</li>
+    <li>No measurement tools</li>
+    <li>Stop coding when the time's up</li>
+    <li>After the round is over, press "Finish" and follow the prompt instructions to see your results</li>
+</ol>
+Good luck and most important of all; have fun!
+""".strip()
 
 
 class RoundEditorView(DetailView):
+    object: Round
+
     model = Round
     context_object_name = "round"
     queryset = Round.objects.filter(is_visible=True)
@@ -43,12 +57,25 @@ class RoundEditorView(DetailView):
                     "nonce": get_random_string(length=12),
                 },
                 key=settings.JWT_KEY,
+                algorithm="HS256",
             ),
         )
+        assets = [
+            {
+                "url": asset.short_url,
+                "name": asset.name,
+                "description": asset.description,
+            }
+            for asset in self.object.assets.all()
+        ]
         return {
-            "instructions_url": reverse("round-instructions", kwargs={"pk": self.object.pk}),
-            "save_url": reverse("round-save", kwargs={"pk": self.object.pk}),
-            "save_token": save_token,
+            "assets": assets,
+            "instructionsUrl": reverse("round-instructions", kwargs={"pk": self.object.pk}),
+            "referenceImage": self.object.screenshot.url if self.object.screenshot else None,
+            "roundId": self.object.slug,
+            "rules": RULES_HTML,
+            "saveToken": save_token,
+            "saveUrl": reverse("round-save", kwargs={"pk": self.object.pk}),
         }
 
     def render_to_response(self, context, **response_kwargs):
@@ -56,7 +83,7 @@ class RoundEditorView(DetailView):
         with open(file_path) as f:
             html = f.read()
         config_json = json.dumps(context["citd_config"], default=str)
-        html = html.replace("<head>", f"<head><script>window.CITD_CONFIG = {config_json};</script>")
+        html = html.replace("<head>", f"<head><script>window.CODE_IN_THE_DARK_CONFIGURATION = {config_json};</script>")
         return HttpResponse(html)
 
 
@@ -65,6 +92,10 @@ class RoundInstructionsView(DetailView):
     template_name = "instructions.html"
     context_object_name = "round"
     queryset = Round.objects.filter(is_visible=True)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["rules_html"] = mark_safe(RULES_HTML)
 
 
 class AssetRedirectView(DetailView):
@@ -91,17 +122,28 @@ class RoundSaveView(DetailView):
         token = jwt.decode(
             jwt=request.POST["token"],
             key=settings.JWT_KEY,
+            algorithms=["HS256"],
         )
         self.object = self.get_object()
         if not self.object.accepting_entries:
             return JsonResponse({"error": "not accepting entries"}, status=403)
-        entry = Entry.objects.create(
-            round=self.object,
-            code=request.POST["code"],
-            contestant_name=request.POST["author"],
-            nonce=token["nonce"],
-        )
-        return JsonResponse({"id": entry.id}, status=201)
+        mode = request.POST.get("mode")
+        code = request.POST["content"]
+        kw = {
+            "round": self.object,
+            "contestant_name": request.POST["author"],
+            "nonce": token["nonce"],
+        }
+        if mode == "draft":
+            last_draft = Draft.objects.filter(**kw).order_by("ctime").last()
+            if last_draft and last_draft.code == code:
+                return JsonResponse({}, status=204)
+            obj = Draft.objects.create(**kw, code=code)
+        elif mode == "final":
+            obj = Entry.objects.create(**kw, code=code)
+        else:
+            return JsonResponse({"error": f"invalid mode {mode!r}"}, status=400)
+        return JsonResponse({"id": obj.id, "mode": mode}, status=201)
 
 
 class RoundTimerView(LoginRequiredMixin, DetailView):
