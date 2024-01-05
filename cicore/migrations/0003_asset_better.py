@@ -6,23 +6,22 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('cicore', '0002_round_slug'),
+        ("cicore", "0002_round_slug"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='asset',
-            options={'ordering': ('name',)},
+            name="asset",
+            options={"ordering": ("name",)},
         ),
         migrations.AddField(
-            model_name='asset',
-            name='description',
+            model_name="asset",
+            name="description",
             field=models.TextField(blank=True),
         ),
         migrations.AlterUniqueTogether(
-            name='asset',
-            unique_together=set([('round', 'name')]),
+            name="asset",
+            unique_together=set([("round", "name")]),
         ),
     ]

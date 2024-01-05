@@ -6,15 +6,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('cicore', '0006_round_visible'),
+        ("cicore", "0006_round_visible"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='round',
-            name='accepting_votes',
+            model_name="round",
+            name="accepting_votes",
             field=models.BooleanField(default=False),
         ),
     ]

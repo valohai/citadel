@@ -12,83 +12,83 @@ class AssetInline(admin.TabularInline):
 
 def format_link(url):
     attrs = {
-        'href': url,
-        'target': '_blank',
+        "href": url,
+        "target": "_blank",
     }
-    return mark_safe('<a{}>{}</a>'.format(
-        flatatt(attrs),
-        url,
-    ))
+    return mark_safe(
+        "<a{}>{}</a>".format(
+            flatatt(attrs),
+            url,
+        ),
+    )
 
 
 class RoundAdmin(admin.ModelAdmin):
     inlines = [AssetInline]
     list_display = (
-        'id',
-        'event',
-        'name',
-        'is_visible',
-        'accepting_entries',
-        'accepting_votes',
-        'editor_url',
-        'show_url',
-        'timer_url',
-        'vote_url',
-        'results_url',
+        "id",
+        "event",
+        "name",
+        "is_visible",
+        "accepting_entries",
+        "accepting_votes",
+        "editor_url",
+        "show_url",
+        "timer_url",
+        "vote_url",
+        "results_url",
     )
     list_filter = (
-        'event',
-        'is_visible',
-        'accepting_entries',
-        'accepting_votes',
+        "event",
+        "is_visible",
+        "accepting_entries",
+        "accepting_votes",
     )
 
     def editor_url(self, instance):
         if instance.accepting_entries:
-            url = reverse('round-editor', kwargs={'slug': instance.slug})
+            url = reverse("round-editor", kwargs={"slug": instance.slug})
             return format_link(url)
-        return ''
+        return ""
 
     def timer_url(self, instance):
         if instance.accepting_entries:
-            url = reverse('round-timer', kwargs={'pk': instance.pk})
+            url = reverse("round-timer", kwargs={"pk": instance.pk})
             return format_link(url)
-        return ''
+        return ""
 
     def vote_url(self, instance):
         if instance.accepting_votes:
-            url = reverse('round-vote', kwargs={'slug': instance.slug})
+            url = reverse("round-vote", kwargs={"slug": instance.slug})
             return format_link(url)
-        return ''
+        return ""
 
     def show_url(self, instance):
         if not instance.accepting_entries:
-            url = reverse('round-show', kwargs={'slug': instance.slug})
+            url = reverse("round-show", kwargs={"slug": instance.slug})
             return format_link(url)
-        return ''
+        return ""
 
     def results_url(self, instance):
         if not instance.accepting_entries and not instance.accepting_votes:
-            url = reverse('round-results', kwargs={'slug': instance.slug})
+            url = reverse("round-results", kwargs={"slug": instance.slug})
             return format_link(url)
-        return ''
+        return ""
 
 
 class EntryAdmin(admin.ModelAdmin):
     readonly_fields = (
-        'round',
-        'id',
-        'code',
+        "round",
+        "id",
+        "code",
     )
     list_display = (
-        'id',
-        'ctime',
-        'round',
-        'contestant_name',
+        "id",
+        "ctime",
+        "round",
+        "contestant_name",
     )
-    list_filter = (
-        'round',
-    )
+    list_filter = ("round",)
 
     def has_add_permission(self, request):
         return False

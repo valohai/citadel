@@ -28,7 +28,7 @@ const EXCLAMATIONS = [
   "Impressive!",
   "Stupendous!",
   "Extreme!",
-  "Awesome!"
+  "Awesome!",
 ];
 
 function setupAce() {
@@ -68,7 +68,7 @@ class App {
     this.debouncedEndStreak = debounce(this.endStreak, STREAK_TIMEOUT);
     this.throttledShake = throttle(this.shake, 100, { trailing: false });
     this.throttledSpawnParticles = throttle(this.spawnParticles, 25, {
-      trailing: false
+      trailing: false,
     });
 
     this.editor = setupAce();
@@ -80,7 +80,7 @@ class App {
 
     $(".instructions-container, .instructions-button").on(
       "click",
-      this.onClickInstructions
+      this.onClickInstructions,
     );
     this.$reference.on("click", this.onClickReference);
     this.$finish.on("click", this.onClickFinish);
@@ -115,7 +115,7 @@ class App {
     window.localStorage[window.STORAGE_ID || "content"] = content;
   };
 
-  onFrame = time => {
+  onFrame = (time) => {
     this.particleHandler.drawParticles(time - this.lastDraw);
     this.lastDraw = time;
     if (window.requestAnimationFrame) {
@@ -161,14 +161,14 @@ class App {
     this.$streakBar.css({
       "webkit-transform": "scaleX(1)",
       transform: "scaleX(1)",
-      transition: "none"
+      transition: "none",
     });
 
     defer(() => {
       this.$streakBar.css({
         "webkit-transform": "",
         transform: "",
-        transition: `all ${STREAK_TIMEOUT}ms linear`
+        transition: `all ${STREAK_TIMEOUT}ms linear`,
       });
     });
   }
@@ -207,7 +207,7 @@ class App {
       2 *
         Math.random() *
         Math.floor(
-          (this.currentStreak - POWER_MODE_ACTIVATION_THRESHOLD) / 100
+          (this.currentStreak - POWER_MODE_ACTIVATION_THRESHOLD) / 100,
         );
     const x = intensity * (Math.random() > 0.5 ? -1 : 1);
     const y = intensity * (Math.random() > 0.5 ? -1 : 1);
@@ -262,7 +262,7 @@ WILL DISQUALIFY YOU. Are you sure you want to proceed? Type "yes" to confirm.
     this.$result.show();
   };
 
-  onChange = event => {
+  onChange = (event) => {
     this.debouncedSaveContent();
     const insertTextAction = event.action === "insert";
     if (insertTextAction) {
@@ -283,7 +283,7 @@ WILL DISQUALIFY YOU. Are you sure you want to proceed? Type "yes" to confirm.
     });
   };
 
-  trySaveCode = code => {
+  trySaveCode = (code) => {
     if (!window.SAVE_URL) {
       return null;
     }
@@ -293,13 +293,13 @@ WILL DISQUALIFY YOU. Are you sure you want to proceed? Type "yes" to confirm.
       data: {
         token: window.SAVE_TOKEN || "",
         code,
-        author: localStorage.name || ""
+        author: localStorage.name || "",
       },
       complete: (xhr, status) => {
         if (status !== "success") {
           alert(`Uploading your code failed (status: ${status})`);
         }
-      }
+      },
     });
   };
 }

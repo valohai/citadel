@@ -1,65 +1,66 @@
-html, body {
-    height: 100vh;
+html,
+body {
+  height: 100vh;
 }
 
 body {
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    font: 10pt sans-serif;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  font: 10pt sans-serif;
 }
 
 header {
-    background: #333;
-    padding: 2px;
-    display: flex;
+  background: #333;
+  padding: 2px;
+  display: flex;
 }
 
 header a {
-    color: #fff;
-    flex: 1;
-    text-align: center;
+  color: #fff;
+  flex: 1;
+  text-align: center;
 }
 
 iframe {
-    flex: 1 1 auto;
-    border: none;
+  flex: 1 1 auto;
+  border: none;
 }
 
 #contestant {
-    position: fixed;
-    left: 2vw;
-    bottom: 2vw;
-    opacity: 0.7;
-    line-height: 1;
-    font-size: 80px;
-    color: orangered;
-    text-shadow: 4px 4px 5px rgba(0, 0, 0, 0.39);
-    font-weight: bold;
+  position: fixed;
+  left: 2vw;
+  bottom: 2vw;
+  opacity: 0.7;
+  line-height: 1;
+  font-size: 80px;
+  color: orangered;
+  text-shadow: 4px 4px 5px rgba(0, 0, 0, 0.39);
+  font-weight: bold;
 }
 #contestant:hover {
-    opacity: 0;
-    cursor: none;
+  opacity: 0;
+  cursor: none;
 }
 
 #vote-url {
-    position: fixed;
-    right: 2vw;
-    bottom: 2vw;
-    font-size: 35px;
-    text-align: right;
+  position: fixed;
+  right: 2vw;
+  bottom: 2vw;
+  font-size: 35px;
+  text-align: right;
 }
 
 #vote-url img {
-    width: 100%;
-    max-width: 150px;
-    display: block;
-    margin-bottom: 0.5em;
+  width: 100%;
+  max-width: 150px;
+  display: block;
+  margin-bottom: 0.5em;
 }
 
 #vote-url span {
-    background: rgba(255, 255, 255, 0.8);
-    color: #000;
-    display: block;
-    padding: 0.25em;
+  background: rgba(255, 255, 255, 0.8);
+  color: #000;
+  display: block;
+  padding: 0.25em;
 }

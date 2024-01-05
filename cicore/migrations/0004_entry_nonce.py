@@ -6,16 +6,15 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('cicore', '0003_asset_better'),
+        ("cicore", "0003_asset_better"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='entry',
-            name='nonce',
-            field=models.CharField(default='xxxxxxx', max_length=64, unique=True, editable=False),
+            model_name="entry",
+            name="nonce",
+            field=models.CharField(default="xxxxxxx", max_length=64, unique=True, editable=False),
             preserve_default=False,
         ),
     ]

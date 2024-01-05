@@ -6,16 +6,15 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('cicore', '0001_initial'),
+        ("cicore", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='round',
-            name='slug',
-            field=models.SlugField(default='xxx', max_length=64, unique=True),
+            model_name="round",
+            name="slug",
+            field=models.SlugField(default="xxx", max_length=64, unique=True),
             preserve_default=False,
         ),
     ]

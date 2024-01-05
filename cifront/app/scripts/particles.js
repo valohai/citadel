@@ -21,7 +21,7 @@ const PARTICLE_COLORS = {
   "string.unquoted.attribute-value.html": [249, 255, 0],
   "entity.other.attribute-name.xml": [129, 148, 244],
   comment: [0, 255, 121],
-  "comment.xml": [0, 255, 121]
+  "comment.xml": [0, 255, 121],
 };
 
 const defaultColor = [255, 255, 255];
@@ -42,8 +42,8 @@ function createParticle(x, y, color) {
     color,
     velocity: {
       x: randRange(PARTICLE_VELOCITY_X_RANGE),
-      y: randRange(PARTICLE_VELOCITY_Y_RANGE)
-    }
+      y: randRange(PARTICLE_VELOCITY_Y_RANGE),
+    },
   };
 }
 
@@ -61,7 +61,7 @@ export class ParticleHandler {
   drawParticles() {
     this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-    this.particles.forEach(particle => {
+    this.particles.forEach((particle) => {
       if (particle.alpha <= 0.1) {
         return;
       }
@@ -78,7 +78,7 @@ export class ParticleHandler {
         Math.round(particle.x - PARTICLE_SIZE / 2),
         Math.round(particle.y - PARTICLE_SIZE / 2),
         PARTICLE_SIZE,
-        PARTICLE_SIZE
+        PARTICLE_SIZE,
       );
     });
   }

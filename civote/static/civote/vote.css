@@ -1,61 +1,62 @@
 body {
-    background: #333;
-    color: #4EFFA1;
-    font: 25pt sans-serif;
+  background: #333;
+  color: #4effa1;
+  font: 25pt sans-serif;
 }
 
-h1, h2 {
-    font: inherit;
-    text-align: center;
+h1,
+h2 {
+  font: inherit;
+  text-align: center;
 }
 
 button {
-    background: #000;
-    display: block;
-    padding: 0.5em;
-    border: 1px solid #4EFFA1;
-    width: 100%;
-    margin-bottom: 1em;
-    color: inherit;
-    font: inherit;
+  background: #000;
+  display: block;
+  padding: 0.5em;
+  border: 1px solid #4effa1;
+  width: 100%;
+  margin-bottom: 1em;
+  color: inherit;
+  font: inherit;
 }
 
 table.results {
-    width: 100%;
-    border-collapse: collapse;
+  width: 100%;
+  border-collapse: collapse;
 }
 
 table.results tr {
-    opacity: 0;
-    transform: scaleY(0);
-    transition: opacity 2s, transform 1.5s;
+  opacity: 0;
+  transform: scaleY(0);
+  transition:
+    opacity 2s,
+    transform 1.5s;
 }
 
-
-
 table.results td {
-    border-bottom: 1px solid #000;
-    padding: 0.3em;
+  border-bottom: 1px solid #000;
+  padding: 0.3em;
 }
 
 .rank-row-1 {
-    background: gold;
-    color: #000;
+  background: gold;
+  color: #000;
 }
 
 .rank-row-2 {
-    background: silver;
-    color: #000;
+  background: silver;
+  color: #000;
 }
 
 .rank-row-3 {
-    background: brown;
+  background: brown;
 }
 
 .result-rank {
-    width: 4em;
+  width: 4em;
 }
 
 .result-votes {
-    text-align: right;
+  text-align: right;
 }

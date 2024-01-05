@@ -19,47 +19,47 @@ from civote.models import Vote
 
 class RoundShowView(DetailView):
     model = Round
-    template_name = 'show.html'
-    context_object_name = 'round'
+    template_name = "show.html"
+    context_object_name = "round"
     queryset = Round.objects.filter(is_visible=True)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        vote_url = self.request.build_absolute_uri(reverse('round-vote', kwargs={'slug': self.object.slug}))
+        vote_url = self.request.build_absolute_uri(reverse("round-vote", kwargs={"slug": self.object.slug}))
         qr_img = qrcode.make(vote_url, border=0)
         io = BytesIO()
-        qr_img.save(io, format='png')
-        context['vote_url'] = vote_url
-        context['vote_redir_url'] = self.request.build_absolute_uri(reverse('vote-redirect'))
-        context['vote_url_qr_image'] = 'data:image/png;base64,%s' % base64.b64encode(io.getvalue()).decode('ascii')
+        qr_img.save(io, format="png")
+        context["vote_url"] = vote_url
+        context["vote_redir_url"] = self.request.build_absolute_uri(reverse("vote-redirect"))
+        context["vote_url_qr_image"] = "data:image/png;base64,%s" % base64.b64encode(io.getvalue()).decode("ascii")
         return context
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         if self.object.accepting_entries:
-            return HttpResponseNotFound('Show mode is not available when the round is still accepting entries')
-        entry_id = request.GET.get('entry')
+            return HttpResponseNotFound("Show mode is not available when the round is still accepting entries")
+        entry_id = request.GET.get("entry")
         if entry_id:
             entry = self.object.entries.get(id=entry_id)
-            return HttpResponse(entry.code, content_type='text/html')
+            return HttpResponse(entry.code, content_type="text/html")
         context = self.get_context_data(object=self.object)
         return self.render_to_response(context)
 
 
 class RoundVoteView(DetailView):
     model = Round
-    template_name = 'vote.html'
-    context_object_name = 'round'
+    template_name = "vote.html"
+    context_object_name = "round"
     queryset = Round.objects.filter(is_visible=True, accepting_entries=False, accepting_votes=True)
 
     # TODO: Could this be easily made more secure?
 
     def get_vote_cookie_name(self):
-        return 'v_%s' % ulid2.encode_ulid_base32(self.object.pk.bytes)
+        return "v_%s" % ulid2.encode_ulid_base32(self.object.pk.bytes)
 
     def get_context_data(self, **kwargs):
         context = super(RoundVoteView, self).get_context_data(**kwargs)
-        context['voted'] = self.has_voted()
+        context["voted"] = self.has_voted()
         return context
 
     def has_voted(self):
@@ -70,13 +70,13 @@ class RoundVoteView(DetailView):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         if not self.has_voted():
-            entry_id = request.POST['entry']
+            entry_id = request.POST["entry"]
             entry = self.object.entries.get(id=entry_id)
             Vote.objects.create(
                 round=entry.round,
                 entry=entry,
                 ip=get_ip(request),
-                user_agent=(request.META.get('HTTP_USER_AGENT') or ''),
+                user_agent=(request.META.get("HTTP_USER_AGENT") or ""),
             )
         resp = HttpResponseRedirect(self.request.path)
         resp.set_cookie(self.get_vote_cookie_name(), str(time.time()))
@@ -85,44 +85,36 @@ class RoundVoteView(DetailView):
 
 class RoundResultsView(DetailView):
     model = Round
-    template_name = 'results.html'
-    context_object_name = 'round'
+    template_name = "results.html"
+    context_object_name = "round"
     queryset = Round.objects.filter(is_visible=True, accepting_entries=False)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if not self.object.accepting_votes:
-            context['results'] = self.calculate_results(self.object)
+            context["results"] = self.calculate_results(self.object)
         return context
 
     def calculate_results(self, round):
         entries = list(round.entries.all())
-        votes_by_entry_id = dict(
-            round.votes
-                .values('entry')
-                .annotate(count=Count('id'))
-                .values_list('entry', 'count')
-        )
+        votes_by_entry_id = dict(round.votes.values("entry").annotate(count=Count("id")).values_list("entry", "count"))
         detail = [
             {
-                'entry': entry,
-                'votes': votes_by_entry_id.get(entry.id, 0),
+                "entry": entry,
+                "votes": votes_by_entry_id.get(entry.id, 0),
             }
-            for entry
-            in entries
+            for entry in entries
         ]
         votes_to_rank = {
-            score: rank
-            for (rank, score)
-            in Ranking(sorted(votes_by_entry_id.values(), reverse=True), start=1)
+            score: rank for (rank, score) in Ranking(sorted(votes_by_entry_id.values(), reverse=True), start=1)
         }
         for detail_entry in detail:
-            detail_entry['rank'] = votes_to_rank.get(detail_entry['votes'], None)
-        detail.sort(key=lambda detail_entry: detail_entry['votes'], reverse=True)
+            detail_entry["rank"] = votes_to_rank.get(detail_entry["votes"], None)
+        detail.sort(key=lambda detail_entry: detail_entry["votes"], reverse=True)
 
         return {
-            'n_votes': round.votes.count(),
-            'detail': detail,
+            "n_votes": round.votes.count(),
+            "detail": detail,
         }
 
 
@@ -130,5 +122,5 @@ class VoteRedirectView(View):
     def get(self, request, *args, **kwargs):
         voting_round = Round.objects.filter(accepting_votes=True).first()
         if not voting_round:
-            return HttpResponse('No round is accepting votes at present. Try again soon.')
-        return HttpResponseRedirect(reverse('round-vote', kwargs={'slug': voting_round.slug}))
+            return HttpResponse("No round is accepting votes at present. Try again soon.")
+        return HttpResponseRedirect(reverse("round-vote", kwargs={"slug": voting_round.slug}))
