@@ -57,6 +57,7 @@ class RoundEditorView(DetailView):
                     "nonce": get_random_string(length=12),
                 },
                 key=settings.JWT_KEY,
+                algorithm="HS256",
             ),
         )
         assets = [
@@ -121,6 +122,7 @@ class RoundSaveView(DetailView):
         token = jwt.decode(
             jwt=request.POST["token"],
             key=settings.JWT_KEY,
+            algorithms=["HS256"],
         )
         self.object = self.get_object()
         if not self.object.accepting_entries:
