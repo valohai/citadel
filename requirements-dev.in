@@ -1,6 +1,4 @@
 -r ./requirements.in
-black
-flake8
 pip-tools
 pytest
 pytest-cov

@@ -1,7 +1,7 @@
 django<3.0
 django-environ
 django-ipware
-Pillow
+Pillow>=9.0
 PyJWT
 qrcode
 ranking
