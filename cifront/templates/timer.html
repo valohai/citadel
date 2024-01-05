@@ -16,8 +16,10 @@
     {{ round.name }}
 </h1>
 <p style="font-size: 1.5em">
-    Contestants:
-    <br><b>{{ edit_url }}</b>
+    Contestants:<br>
+    <img src="{{ edit_url_qr_image }}">
+    <br>
+    <b>{{ edit_url }}</b>
 </p>
 <div id="timer-output"></div>
 <div id="timer-controls">

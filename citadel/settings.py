@@ -22,6 +22,7 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = env.str("MEDIA_ROOT", default=os.path.join(VAR_ROOT, "media"))
 SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
 SESSION_COOKIE_NAME = "citadel_session"
+X_FRAME_OPTIONS = "SAMEORIGIN"
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -66,7 +67,7 @@ TEMPLATES = [
 WSGI_APPLICATION = "citadel.wsgi.application"
 
 DATABASES = {
-    "default": env.db_url(default="sqlite:///%s" % os.path.join(VAR_ROOT, "citadel.sqlite3")),
+    "default": env.db_url(default=f"sqlite:///{os.path.join(VAR_ROOT, 'citadel.sqlite3')}"),
 }
 
 AUTH_PASSWORD_VALIDATORS = []

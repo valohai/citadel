@@ -1,10 +1,12 @@
+import json
 from datetime import timedelta
 
 import jwt
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.staticfiles.finders import find as find_staticfile
 from django.core.exceptions import ObjectDoesNotExist
-from django.http.response import HttpResponseNotFound, HttpResponseRedirect, JsonResponse
+from django.http.response import HttpResponse, HttpResponseNotFound, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.encoding import force_str
@@ -12,11 +14,11 @@ from django.utils.timezone import now
 from django.views.generic import DetailView
 
 from cicore.models import Asset, Entry, Round
+from cicore.utils import make_qr_code_data_uri
 
 
 class RoundEditorView(DetailView):
     model = Round
-    template_name = "editor.html"
     context_object_name = "round"
     queryset = Round.objects.filter(is_visible=True)
 
@@ -29,9 +31,11 @@ class RoundEditorView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["instructions_url"] = reverse("round-instructions", kwargs={"pk": self.object.pk})
-        context["save_url"] = reverse("round-save", kwargs={"pk": self.object.pk})
-        context["save_token"] = force_str(
+        context["citd_config"] = self.get_citd_config()
+        return context
+
+    def get_citd_config(self):
+        save_token = force_str(
             jwt.encode(
                 payload={
                     "nbf": now(),
@@ -41,7 +45,19 @@ class RoundEditorView(DetailView):
                 key=settings.JWT_KEY,
             ),
         )
-        return context
+        return {
+            "instructions_url": reverse("round-instructions", kwargs={"pk": self.object.pk}),
+            "save_url": reverse("round-save", kwargs={"pk": self.object.pk}),
+            "save_token": save_token,
+        }
+
+    def render_to_response(self, context, **response_kwargs):
+        file_path = find_staticfile("editor/index.html")
+        with open(file_path) as f:
+            html = f.read()
+        config_json = json.dumps(context["citd_config"], default=str)
+        html = html.replace("<head>", f"<head><script>window.CITD_CONFIG = {config_json};</script>")
+        return HttpResponse(html)
 
 
 class RoundInstructionsView(DetailView):
@@ -103,7 +119,7 @@ class RoundTimerView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["edit_url"] = self.request.build_absolute_uri(
-            reverse("round-editor", kwargs={"slug": self.object.slug}),
-        )
+        edit_url = self.request.build_absolute_uri(reverse("round-editor", kwargs={"slug": self.object.slug}))
+        context["edit_url"] = edit_url
+        context["edit_url_qr_image"] = make_qr_code_data_uri(edit_url)
         return context

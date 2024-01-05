@@ -1,8 +1,5 @@
-import base64
 import time
-from io import BytesIO
 
-import qrcode
 import ulid2
 from django.db.models import Count
 from django.http import HttpResponseNotFound
@@ -14,6 +11,7 @@ from ipware.ip import get_client_ip
 from ranking import Ranking
 
 from cicore.models import Round
+from cicore.utils import make_qr_code_data_uri
 from civote.models import Vote
 
 
@@ -26,12 +24,9 @@ class RoundShowView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         vote_url = self.request.build_absolute_uri(reverse("round-vote", kwargs={"slug": self.object.slug}))
-        qr_img = qrcode.make(vote_url, border=0)
-        io = BytesIO()
-        qr_img.save(io, format="png")
         context["vote_url"] = vote_url
         context["vote_redir_url"] = self.request.build_absolute_uri(reverse("vote-redirect"))
-        context["vote_url_qr_image"] = "data:image/png;base64,%s" % base64.b64encode(io.getvalue()).decode("ascii")
+        context["vote_url_qr_image"] = make_qr_code_data_uri(vote_url)
         return context
 
     def get(self, request, *args, **kwargs):
@@ -55,7 +50,7 @@ class RoundVoteView(DetailView):
     # TODO: Could this be easily made more secure?
 
     def get_vote_cookie_name(self):
-        return "v_%s" % ulid2.encode_ulid_base32(self.object.pk.bytes)
+        return f"v_{ulid2.encode_ulid_base32(self.object.pk.bytes)}"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
