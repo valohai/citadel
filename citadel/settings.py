@@ -22,6 +22,7 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = env.str("MEDIA_ROOT", default=os.path.join(VAR_ROOT, "media"))
 SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
 SESSION_COOKIE_NAME = "citadel_session"
+X_FRAME_OPTIONS = "SAMEORIGIN"
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
