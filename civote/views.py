@@ -10,7 +10,7 @@ from django.http.response import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.views import View
 from django.views.generic import DetailView
-from ipware.ip import get_ip
+from ipware.ip import get_client_ip
 from ranking import Ranking
 
 from cicore.models import Round
@@ -75,7 +75,7 @@ class RoundVoteView(DetailView):
             Vote.objects.create(
                 round=entry.round,
                 entry=entry,
-                ip=get_ip(request),
+                ip=get_client_ip(request)[0],
                 user_agent=(request.headers.get("user-agent") or ""),
             )
         resp = HttpResponseRedirect(self.request.path)
