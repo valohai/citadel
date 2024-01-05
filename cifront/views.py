@@ -12,6 +12,7 @@ from django.utils.timezone import now
 from django.views.generic import DetailView
 
 from cicore.models import Asset, Entry, Round
+from cicore.utils import make_qr_code_data_uri
 
 
 class RoundEditorView(DetailView):
@@ -103,7 +104,7 @@ class RoundTimerView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["edit_url"] = self.request.build_absolute_uri(
-            reverse("round-editor", kwargs={"slug": self.object.slug}),
-        )
+        edit_url = self.request.build_absolute_uri(reverse("round-editor", kwargs={"slug": self.object.slug}))
+        context["edit_url"] = edit_url
+        context["edit_url_qr_image"] = make_qr_code_data_uri(edit_url)
         return context
