@@ -67,7 +67,7 @@ TEMPLATES = [
 WSGI_APPLICATION = "citadel.wsgi.application"
 
 DATABASES = {
-    "default": env.db_url(default="sqlite:///%s" % os.path.join(VAR_ROOT, "citadel.sqlite3")),
+    "default": env.db_url(default=f"sqlite:///{os.path.join(VAR_ROOT, 'citadel.sqlite3')}"),
 }
 
 AUTH_PASSWORD_VALIDATORS = []

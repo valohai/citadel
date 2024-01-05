@@ -50,7 +50,7 @@ class RoundVoteView(DetailView):
     # TODO: Could this be easily made more secure?
 
     def get_vote_cookie_name(self):
-        return "v_%s" % ulid2.encode_ulid_base32(self.object.pk.bytes)
+        return f"v_{ulid2.encode_ulid_base32(self.object.pk.bytes)}"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
