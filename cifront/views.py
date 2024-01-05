@@ -7,7 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http.response import HttpResponseNotFound, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.utils.crypto import get_random_string
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from django.utils.timezone import now
 from django.views.generic import DetailView
 
@@ -31,12 +31,12 @@ class RoundEditorView(DetailView):
         context = super(RoundEditorView, self).get_context_data(**kwargs)
         context["instructions_url"] = reverse("round-instructions", kwargs={"pk": self.object.pk})
         context["save_url"] = reverse("round-save", kwargs={"pk": self.object.pk})
-        context["save_token"] = force_text(
+        context["save_token"] = force_str(
             jwt.encode(
                 payload={
                     "nbf": now(),
                     "exp": now() + timedelta(hours=1),
-                    "nonce": get_random_string(),
+                    "nonce": get_random_string(length=12),
                 },
                 key=settings.JWT_KEY,
             ),

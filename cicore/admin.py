@@ -23,6 +23,7 @@ def format_link(url):
     )
 
 
+@admin.register(Round)
 class RoundAdmin(admin.ModelAdmin):
     inlines = [AssetInline]
     list_display = (
@@ -76,6 +77,7 @@ class RoundAdmin(admin.ModelAdmin):
         return ""
 
 
+@admin.register(Entry)
 class EntryAdmin(admin.ModelAdmin):
     readonly_fields = (
         "round",
@@ -95,5 +97,3 @@ class EntryAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Event)
-admin.site.register(Entry, EntryAdmin)
-admin.site.register(Round, RoundAdmin)

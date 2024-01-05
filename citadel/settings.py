@@ -13,7 +13,6 @@ ALLOWED_HOSTS = ["*"]
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_I18N = True
-USE_L10N = True
 USE_TZ = True
 VAR_ROOT = env.str("VAR_ROOT", default=os.path.join(BASE_DIR, "var"))
 os.makedirs(VAR_ROOT, exist_ok=True)

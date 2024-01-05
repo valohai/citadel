@@ -76,7 +76,7 @@ class RoundVoteView(DetailView):
                 round=entry.round,
                 entry=entry,
                 ip=get_ip(request),
-                user_agent=(request.META.get("HTTP_USER_AGENT") or ""),
+                user_agent=(request.headers.get("user-agent") or ""),
             )
         resp = HttpResponseRedirect(self.request.path)
         resp.set_cookie(self.get_vote_cookie_name(), str(time.time()))
