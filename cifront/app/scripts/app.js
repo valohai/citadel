@@ -283,6 +283,7 @@ WILL DISQUALIFY YOU. Are you sure you want to proceed? Type "yes" to confirm.
     });
   };
 
+  // eslint-disable-next-line class-methods-use-this
   trySaveCode = (code) => {
     if (!window.SAVE_URL) {
       return null;
