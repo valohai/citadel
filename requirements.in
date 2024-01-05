@@ -1,4 +1,4 @@
-django<3.0
+django>=5.0
 django-environ
 django-ipware
 Pillow>=9.0
