@@ -4,5 +4,6 @@
 .idea
 /data
 /var
+cifront/static/editor
 htmlcov
 node_modules

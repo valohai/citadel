@@ -64,7 +64,6 @@ should get you up and running if you're averse to containers.
 - `python manage.py migrate`
 - `python manage.py createsuperuser`
 - `python manage.py runserver`
-- To edit the, erm, editor, `npm run dev` in another tab for Webpack in watch mode.
 
 ## License
 
@@ -73,10 +72,6 @@ should get you up and running if you're averse to containers.
   licensed under the 3-clause BSD License (see `LICENSE.tictail`).
   The use of the Code in the Dark brand in this repository is in good faith.
   Any requests for external use should seek the permission of Tictail directly.
-- `cifront/app` and `cifront/templates/editor.html`
-  are adapted from the [Code in the Dark Editor][citdedit],
-  which is Copyright (c) 2015, Tictail Inc.;
-  licensed under the 3-clause BSD License (see `LICENSE.tictail`).
 
 [citd]: http://codeinthedark.com/
 [citdedit]: https://github.com/codeinthedark/editor

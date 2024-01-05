@@ -1,0 +1,28 @@
+name: Build and test
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: yarn
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+          cache: pip
+          cache-dependency-path: requirements*txt
+      - run: npm ci
+        working-directory: code-in-the-dim
+      - run: yarn --frozen-lockfile
+      - run: yarn build
+      - run: pip install -r requirements.txt -r requirements-dev.txt
+      - run: pytest --cov .
+        env:
+          DEBUG: "1"
