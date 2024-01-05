@@ -14,7 +14,7 @@ from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 from django.views.generic import DetailView
 
-from cicore.models import Asset, Entry, Round
+from cicore.models import Asset, Draft, Entry, Round
 from cicore.utils import make_qr_code_data_uri
 
 RULES_HTML = """
@@ -127,13 +127,23 @@ class RoundSaveView(DetailView):
         self.object = self.get_object()
         if not self.object.accepting_entries:
             return JsonResponse({"error": "not accepting entries"}, status=403)
-        entry = Entry.objects.create(
-            round=self.object,
-            code=request.POST["code"],
-            contestant_name=request.POST["author"],
-            nonce=token["nonce"],
-        )
-        return JsonResponse({"id": entry.id}, status=201)
+        mode = request.POST.get("mode")
+        code = request.POST["content"]
+        kw = {
+            "round": self.object,
+            "contestant_name": request.POST["author"],
+            "nonce": token["nonce"],
+        }
+        if mode == "draft":
+            last_draft = Draft.objects.filter(**kw).order_by("ctime").last()
+            if last_draft and last_draft.code == code:
+                return JsonResponse({}, status=204)
+            obj = Draft.objects.create(**kw, code=code)
+        elif mode == "final":
+            obj = Entry.objects.create(**kw, code=code)
+        else:
+            return JsonResponse({"error": f"invalid mode {mode!r}"}, status=400)
+        return JsonResponse({"id": obj.id, "mode": mode}, status=201)
 
 
 class RoundTimerView(LoginRequiredMixin, DetailView):
