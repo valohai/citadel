@@ -30,6 +30,8 @@ Good luck and most important of all; have fun!
 
 
 class RoundEditorView(DetailView):
+    object: Round
+
     model = Round
     context_object_name = "round"
     queryset = Round.objects.filter(is_visible=True)
@@ -57,10 +59,22 @@ class RoundEditorView(DetailView):
                 key=settings.JWT_KEY,
             ),
         )
+        assets = [
+            {
+                "url": asset.short_url,
+                "name": asset.name,
+                "description": asset.description,
+            }
+            for asset in self.object.assets.all()
+        ]
         return {
-            "instructions_url": reverse("round-instructions", kwargs={"pk": self.object.pk}),
-            "save_url": reverse("round-save", kwargs={"pk": self.object.pk}),
-            "save_token": save_token,
+            "assets": assets,
+            "instructionsUrl": reverse("round-instructions", kwargs={"pk": self.object.pk}),
+            "referenceImage": self.object.screenshot.url if self.object.screenshot else None,
+            "roundId": self.object.slug,
+            "rules": RULES_HTML,
+            "saveToken": save_token,
+            "saveUrl": reverse("round-save", kwargs={"pk": self.object.pk}),
         }
 
     def render_to_response(self, context, **response_kwargs):
@@ -68,7 +82,7 @@ class RoundEditorView(DetailView):
         with open(file_path) as f:
             html = f.read()
         config_json = json.dumps(context["citd_config"], default=str)
-        html = html.replace("<head>", f"<head><script>window.CITD_CONFIG = {config_json};</script>")
+        html = html.replace("<head>", f"<head><script>window.CODE_IN_THE_DARK_CONFIGURATION = {config_json};</script>")
         return HttpResponse(html)
 
 
