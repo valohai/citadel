@@ -10,11 +10,23 @@ from django.http.response import HttpResponse, HttpResponseNotFound, HttpRespons
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.encoding import force_str
+from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 from django.views.generic import DetailView
 
 from cicore.models import Asset, Entry, Round
 from cicore.utils import make_qr_code_data_uri
+
+RULES_HTML = """
+<ol>
+    <li>No previews - of either results or assets!</li>
+    <li>Stay in this editor at all times</li>
+    <li>No measurement tools</li>
+    <li>Stop coding when the time's up</li>
+    <li>After the round is over, press "Finish" and follow the prompt instructions to see your results</li>
+</ol>
+Good luck and most important of all; have fun!
+""".strip()
 
 
 class RoundEditorView(DetailView):
@@ -65,6 +77,10 @@ class RoundInstructionsView(DetailView):
     template_name = "instructions.html"
     context_object_name = "round"
     queryset = Round.objects.filter(is_visible=True)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["rules_html"] = mark_safe(RULES_HTML)
 
 
 class AssetRedirectView(DetailView):
