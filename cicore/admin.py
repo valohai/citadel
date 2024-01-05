@@ -15,12 +15,7 @@ def format_link(url):
         "href": url,
         "target": "_blank",
     }
-    return mark_safe(
-        "<a{}>{}</a>".format(
-            flatatt(attrs),
-            url,
-        ),
-    )
+    return mark_safe(f"<a{flatatt(attrs)}>{url}</a>")
 
 
 @admin.register(Round)

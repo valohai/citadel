@@ -1,4 +1,5 @@
 [tool.ruff]
+target-version = "py311"
 ignore = [
     "E501",
 ]
@@ -8,7 +9,9 @@ extend-select = [
     "COM",
     "E",
     "F",
+    "FLY",
     "I",
+    "UP",
     "W",
 ]
 

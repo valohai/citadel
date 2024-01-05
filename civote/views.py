@@ -58,7 +58,7 @@ class RoundVoteView(DetailView):
         return "v_%s" % ulid2.encode_ulid_base32(self.object.pk.bytes)
 
     def get_context_data(self, **kwargs):
-        context = super(RoundVoteView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context["voted"] = self.has_voted()
         return context
 

@@ -30,7 +30,7 @@ class Round(models.Model):
         ordering = ("event", "number")
 
     def __str__(self):
-        return "{} – {}: {}".format(self.event.name, self.number, self.name)
+        return f"{self.event.name} – {self.number}: {self.name}"
 
 
 class Asset(models.Model):

@@ -28,7 +28,7 @@ class RoundEditorView(DetailView):
         return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
-        context = super(RoundEditorView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context["instructions_url"] = reverse("round-instructions", kwargs={"pk": self.object.pk})
         context["save_url"] = reverse("round-save", kwargs={"pk": self.object.pk})
         context["save_token"] = force_str(
@@ -102,7 +102,7 @@ class RoundTimerView(LoginRequiredMixin, DetailView):
         return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
-        context = super(RoundTimerView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context["edit_url"] = self.request.build_absolute_uri(
             reverse("round-editor", kwargs={"slug": self.object.slug}),
         )

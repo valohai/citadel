@@ -19,4 +19,4 @@ class Command(BaseCommand):
                 ip="0.0.0.0",
                 user_agent="fake",
             )
-        self.stdout.write("OK. {} votes now.".format(round.votes.count()))
+        self.stdout.write(f"OK. {round.votes.count()} votes now.")
