@@ -1,17 +1,16 @@
 module.exports = {
-  parser: "babel-eslint",
   env: {
     browser: true,
-    es6: true
+    es2019: true,
   },
   extends: ["airbnb-base"],
   globals: {
     Atomics: "readonly",
-    SharedArrayBuffer: "readonly"
+    SharedArrayBuffer: "readonly",
   },
   parserOptions: {
-    ecmaVersion: 2018,
-    sourceType: "module"
+    ecmaVersion: 2022,
+    sourceType: "module",
   },
   rules: {
     "arrow-parens": "off",
@@ -21,6 +20,6 @@ module.exports = {
     "no-plusplus": "off",
     "object-curly-newline": "off",
     "operator-linebreak": "off",
-    "quotes": ["error", "double"]
-  }
+    quotes: ["error", "double"],
+  },
 };
