@@ -20,6 +20,7 @@ STATIC_URL = "/static/"
 STATIC_ROOT = env.str("STATIC_ROOT", default=os.path.join(VAR_ROOT, "static"))
 MEDIA_URL = "/media/"
 MEDIA_ROOT = env.str("MEDIA_ROOT", default=os.path.join(VAR_ROOT, "media"))
+SERVE_MEDIA = env.bool("SERVE_MEDIA", default=DEBUG)
 SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
 SESSION_COOKIE_NAME = "citadel_session"
 X_FRAME_OPTIONS = "SAMEORIGIN"

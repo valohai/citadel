@@ -20,4 +20,5 @@ ADD . /home/citadel
 COPY --from=frontend /frontend/cifront/static/editor /home/citadel/cifront/static/editor
 ENV VAR_ROOT /data
 ENV PORT 8000
+ENV SERVE_MEDIA 1
 CMD /home/citadel/run-gunicorn.sh
