@@ -1,9 +1,0 @@
-django>=5.0
-django-environ
-django-ipware
-Pillow>=9.0
-PyJWT
-qrcode
-ranking
-ulid2
-whitenoise

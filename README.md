@@ -4,7 +4,7 @@ A **C**ode **I**n **T**he D**a**rk event management system.
 
 Citadel is an integrated Django app for managing [Code In The Dark][citd] events.
 
-## Getting started
+## Deployment
 
 ### Using Docker
 
@@ -29,35 +29,16 @@ docker run -it \
     citadel
 ```
 
-### Other deployment systems
+## Development without Docker
 
-Citadel is a plain ol' Django project configured with
-environment variables, as is best practice these days,
-so you should have no problems getting it up and running
-under uWSGI/Gunicorn/what-have-you.
-
-The environment variables are:
-
-- `DEBUG`: Whether Django's DEBUG mode is on.
-- `SECRET_KEY`: The Django secret key. Make it yours.
-- `VAR_ROOT`: Where to store all sorts of variable data (static/media/SQLite database). Defaults to `var` in the project root.
-- `DATABASE_URL`: An URL pointing to your database. Defaults to an SQLite database under `var`.
-
-So,
-
-```bash
-pip install uwsgi
-uwsgi --master --virtualenv $VIRTUAL_ENV --http :8000 -p5 --env DEBUG=false --env SECRET_KEY=asdf --wsgi=citadel.wsgi
-```
-
-should get you up and running if you're averse to containers.
-
-## Development
-
-- Get a Python 3.x virtualenv up and running
+- Ensure you've cloned submodules (`git submodule update --init --recursive`)
+- Install dependencies for the editor (`npm ci` in `code-in-the-dim/`)
+- Get a Python 3.11+ virtualenv up and running
+- Run `pip install -e .[dev]`
 - Set the `DEBUG` environment variable to something truthy
+- Run `npm ci` and `npm run build` (with `--watch` if you need to)
 - `python manage.py migrate`
-- `python manage.py createsuperuser`
+- `python manage.py cicore_init`
 - `python manage.py runserver`
 
 ## License
