@@ -12,20 +12,15 @@ This will assume you want to store variable data
 (database, assets, screenshots, etc.)
 in the "data" subdirectory of the current directory.
 
-You will be prompted for admin user credentials
-during the first step.
+The default admin password is `totoro` (unless you set
+one with the `ADMIN_PASSWORD` environment variable).
 
-Naturally, replace `FIGUREOUTSOMETHINGSECRET`.
+Naturally, replace `FIGUREOUTSOMETHINGSECRET` with
+an uniquely generated secret key.
 
 ```bash
 docker build -t citadel .
 mkdir `pwd`/data
-# first run:
-docker run -it \
-    -e SECRET_KEY=FIGUREOUTSOMETHINGSECRET \
-    -v `pwd`/data:/data \
-    citadel \
-    ./initialize.sh
 # start the server, publishing on port 8000
 docker run -it \
     -e SECRET_KEY=FIGUREOUTSOMETHINGSECRET \

@@ -7,6 +7,7 @@ ADD package.json .
 ADD yarn.lock .
 ADD vite.config.js .
 ADD code-in-the-dim ./code-in-the-dim
+RUN (cd code-in-the-dim && npm ci)
 RUN yarn --frozen-lockfile && yarn build
 FROM python:3.12
 RUN groupadd citadel && useradd -g citadel citadel && mkdir /home/citadel && chown -R citadel:citadel /home/citadel
