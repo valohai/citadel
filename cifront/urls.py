@@ -1,7 +1,14 @@
 from django.urls import re_path
 from django.views.decorators.csrf import csrf_exempt
 
-from cifront.views import AssetRedirectView, RoundEditorView, RoundInstructionsView, RoundSaveView, RoundTimerView
+from cifront.views import (
+    AssetRedirectView,
+    RoundEditorView,
+    RoundInstructionsView,
+    RoundProgressView,
+    RoundSaveView,
+    RoundTimerView,
+)
 
 urlpatterns = [
     re_path(r"^e/(?P<slug>.+?)/$", RoundEditorView.as_view(), name="round-editor"),
@@ -9,4 +16,5 @@ urlpatterns = [
     re_path(r"^timer/(?P<pk>.+?)/$", RoundTimerView.as_view(), name="round-timer"),
     re_path(r"^a/(?P<round_slug>.+?)/(?P<asset_name>.+?)/*$", AssetRedirectView.as_view(), name="asset-redirect"),
     re_path(r"^save/(?P<pk>.+?)/$", csrf_exempt(RoundSaveView.as_view()), name="round-save"),
+    re_path(r"^progress/(?P<pk>.+?)/$", csrf_exempt(RoundProgressView.as_view()), name="round-progress"),
 ]
