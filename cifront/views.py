@@ -6,6 +6,7 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.staticfiles.finders import find as find_staticfile
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import models
 from django.http.response import HttpResponse, HttpResponseNotFound, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.utils.crypto import get_random_string
@@ -165,3 +166,33 @@ class RoundTimerView(LoginRequiredMixin, DetailView):
         context["edit_url"] = edit_url
         context["edit_url_qr_image"] = make_qr_code_data_uri(edit_url)
         return context
+
+
+class RoundProgressView(LoginRequiredMixin, DetailView):
+    model = Round
+    context_object_name = "round"
+    queryset = Round.objects.filter(is_visible=True)
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        # We need to do some gentle extra shenanigans to get the latest draft per team
+        # in the absence of `DISTINCT OF` (SQLite, MySQL, etc).
+        newest_draft_id_per_team = dict(
+            Draft.objects.filter(round=self.object)
+            .values("contestant_name")
+            .annotate(newest_id=models.Max("id"))  # is fine because of ULIDs
+            .values_list("newest_id", "contestant_name"),
+        )
+        data = {
+            "latestDrafts": [
+                {
+                    "code": draft.code,
+                    "contestantName": draft.contestant_name,
+                    "ctime": draft.ctime.isoformat(),
+                    "id": str(draft.id),
+                    "nonce": draft.nonce,
+                }
+                for draft in Draft.objects.filter(id__in=newest_draft_id_per_team)
+            ],
+        }
+        return JsonResponse(data)
