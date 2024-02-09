@@ -3,7 +3,7 @@ from django.forms.utils import flatatt
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 
-from cicore.models import Asset, Entry, Event, Round
+from cicore.models import Asset, Draft, Entry, Event, Round
 
 
 class AssetInline(admin.TabularInline):
@@ -91,4 +91,11 @@ class EntryAdmin(admin.ModelAdmin):
         return False
 
 
-admin.site.register(Event)
+@admin.register(Draft)
+class DraftAdmin(EntryAdmin):
+    pass
+
+
+@admin.register(Event)
+class EventAdmin(admin.ModelAdmin):
+    pass
