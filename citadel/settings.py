@@ -24,6 +24,7 @@ SERVE_MEDIA = env.bool("SERVE_MEDIA", default=DEBUG)
 SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
 SESSION_COOKIE_NAME = "citadel_session"
 X_FRAME_OPTIONS = "SAMEORIGIN"
+CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
