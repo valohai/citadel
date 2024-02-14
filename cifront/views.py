@@ -3,7 +3,6 @@ from datetime import timedelta
 
 import jwt
 from django.conf import settings
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.staticfiles.finders import find as find_staticfile
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
@@ -148,7 +147,7 @@ class RoundSaveView(PKOrSlugDetailView):
         return JsonResponse({"id": obj.id, "mode": mode}, status=201)
 
 
-class RoundTimerView(LoginRequiredMixin, PKOrSlugDetailView):
+class RoundTimerView(PKOrSlugDetailView):
     model = Round
     template_name = "timer.html"
     context_object_name = "round"
@@ -169,7 +168,7 @@ class RoundTimerView(LoginRequiredMixin, PKOrSlugDetailView):
         return context
 
 
-class RoundProgressView(LoginRequiredMixin, PKOrSlugDetailView):
+class RoundProgressView(PKOrSlugDetailView):
     model = Round
     context_object_name = "round"
     queryset = Round.objects.filter(is_visible=True)
