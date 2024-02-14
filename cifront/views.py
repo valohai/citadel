@@ -17,6 +17,7 @@ from django.views.generic import DetailView
 
 from cicore.models import Asset, Draft, Entry, Round
 from cicore.utils import make_qr_code_data_uri
+from citadel.view_mixins import PKOrSlugDetailView
 
 RULES_HTML = """
 <ol>
@@ -30,7 +31,7 @@ Good luck and most important of all; have fun!
 """.strip()
 
 
-class RoundEditorView(DetailView):
+class RoundEditorView(PKOrSlugDetailView):
     object: Round
 
     model = Round
@@ -88,7 +89,7 @@ class RoundEditorView(DetailView):
         return HttpResponse(html)
 
 
-class RoundInstructionsView(DetailView):
+class RoundInstructionsView(PKOrSlugDetailView):
     model = Round
     template_name = "instructions.html"
     context_object_name = "round"
@@ -113,7 +114,7 @@ class AssetRedirectView(DetailView):
             return HttpResponseNotFound("asset not found")
 
 
-class RoundSaveView(DetailView):
+class RoundSaveView(PKOrSlugDetailView):
     model = Round
 
     def get(self, request, *args, **kwargs):
@@ -147,7 +148,7 @@ class RoundSaveView(DetailView):
         return JsonResponse({"id": obj.id, "mode": mode}, status=201)
 
 
-class RoundTimerView(LoginRequiredMixin, DetailView):
+class RoundTimerView(LoginRequiredMixin, PKOrSlugDetailView):
     model = Round
     template_name = "timer.html"
     context_object_name = "round"
@@ -168,7 +169,7 @@ class RoundTimerView(LoginRequiredMixin, DetailView):
         return context
 
 
-class RoundProgressView(LoginRequiredMixin, DetailView):
+class RoundProgressView(LoginRequiredMixin, PKOrSlugDetailView):
     model = Round
     context_object_name = "round"
     queryset = Round.objects.filter(is_visible=True)
