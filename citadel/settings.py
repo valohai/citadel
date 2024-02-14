@@ -25,6 +25,10 @@ SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
 SESSION_COOKIE_NAME = "citadel_session"
 X_FRAME_OPTIONS = "SAMEORIGIN"
 CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_URLS_REGEX = r"^/progress/.*"  # Allow the progress API to be requested from anywhere
+CORS_ALLOW_METHODS = ("GET",)
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -32,6 +36,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "corsheaders",
     "citadel",
     "cicore",
     "cifront",
@@ -39,6 +44,7 @@ INSTALLED_APPS = [
 ]
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
