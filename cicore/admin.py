@@ -1,6 +1,5 @@
 from django.contrib import admin
 from django.forms.utils import flatatt
-from django.urls import reverse
 from django.utils.safestring import mark_safe
 
 from cicore.models import Asset, Draft, Entry, Event, Round
@@ -10,12 +9,12 @@ class AssetInline(admin.TabularInline):
     model = Asset
 
 
-def format_link(url):
+def format_link(url, name):
     attrs = {
         "href": url,
         "target": "_blank",
     }
-    return mark_safe(f"<a{flatatt(attrs)}>{url}</a>")
+    return mark_safe(f"<a{flatatt(attrs)}>{name}</a>")
 
 
 @admin.register(Round)
@@ -41,35 +40,20 @@ class RoundAdmin(admin.ModelAdmin):
         "accepting_votes",
     )
 
-    def editor_url(self, instance):
-        if instance.accepting_entries:
-            url = reverse("round-editor", kwargs={"slug": instance.slug})
-            return format_link(url)
-        return ""
+    def editor_url(self, instance: Round):
+        return format_link(instance.get_edit_url(), "Edit")
 
-    def timer_url(self, instance):
-        if instance.accepting_entries:
-            url = reverse("round-timer", kwargs={"pk": instance.pk})
-            return format_link(url)
-        return ""
+    def timer_url(self, instance: Round):
+        return format_link(instance.get_timer_url(), "Timer")
 
-    def vote_url(self, instance):
-        if instance.accepting_votes:
-            url = reverse("round-vote", kwargs={"slug": instance.slug})
-            return format_link(url)
-        return ""
+    def vote_url(self, instance: Round):
+        return format_link(instance.get_vote_url(), "Vote")
 
-    def show_url(self, instance):
-        if not instance.accepting_entries:
-            url = reverse("round-show", kwargs={"slug": instance.slug})
-            return format_link(url)
-        return ""
+    def show_url(self, instance: Round):
+        return format_link(instance.get_show_url(), "Show")
 
-    def results_url(self, instance):
-        if not instance.accepting_entries and not instance.accepting_votes:
-            url = reverse("round-results", kwargs={"slug": instance.slug})
-            return format_link(url)
-        return ""
+    def results_url(self, instance: Round):
+        return format_link(instance.get_results_url(), "Results")
 
 
 @admin.register(Entry)

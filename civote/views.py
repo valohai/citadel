@@ -23,7 +23,7 @@ class RoundShowView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        vote_url = self.request.build_absolute_uri(reverse("round-vote", kwargs={"slug": self.object.slug}))
+        vote_url = self.object.get_vote_url(self.request)
         context["vote_url"] = vote_url
         context["vote_redir_url"] = self.request.build_absolute_uri(reverse("vote-redirect"))
         context["vote_url_qr_image"] = make_qr_code_data_uri(vote_url)
