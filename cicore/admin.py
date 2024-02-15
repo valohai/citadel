@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.db import models
 from django.forms.utils import flatatt
 from django.utils.safestring import mark_safe
 
@@ -27,6 +28,7 @@ class RoundAdmin(admin.ModelAdmin):
         "is_visible",
         "accepting_entries",
         "accepting_votes",
+        "n_votes",
         "editor_url",
         "show_url",
         "timer_url",
@@ -39,6 +41,18 @@ class RoundAdmin(admin.ModelAdmin):
         "accepting_entries",
         "accepting_votes",
     )
+
+    def get_queryset(self, request):
+        return (
+            super()
+            .get_queryset(request)
+            .annotate(
+                n_votes=models.Count("votes"),
+            )
+        )
+
+    def n_votes(self, instance: Round):
+        return getattr(instance, "n_votes", None)
 
     def editor_url(self, instance: Round):
         return format_link(instance.get_edit_url(), "Edit")
