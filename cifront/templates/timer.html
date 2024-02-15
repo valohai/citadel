@@ -15,16 +15,30 @@
     Round {{ round.number }}:
     {{ round.name }}
 </h1>
+{% if round.accepting_entries %}
 <p style="font-size: 1.5em">
     Contestants:<br>
     <img src="{{ edit_url_qr_image }}">
     <br>
     <b>{{ edit_url }}</b>
 </p>
+{% else %}
+    Not accepting entries anymore!
+{% endif %}
+
 <div id="timer-output"></div>
 <div id="timer-controls">
     <input type="number" value="900" id="seconds">
     <input type="checkbox" id="running">
+</div>
+<div id="barbar">
+    {% if screenshot_url %}
+        <a href="{{ screenshot_url }}">Screenshot</a>
+    {% endif %}
+    &ndash;
+    <a href="{{ show_url }}">Show</a>
+    &ndash;
+    <a href="{{ results_url }}">Voting Results</a>
 </div>
 <script src="{% static "timer.js" %}"></script>
 </body>

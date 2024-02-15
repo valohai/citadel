@@ -31,3 +31,9 @@ body.out-of-time #timer-output {
     9vw Fira Code,
     monospace;
 }
+
+#barbar {
+  position: fixed;
+  right: 5px;
+  bottom: 5px;
+}
