@@ -154,7 +154,7 @@ class RoundTimerView(PKOrSlugDetailView):
     queryset = Round.objects.filter(is_visible=True)
 
     def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
+        self.object: Round = self.get_object()
         if not self.object.accepting_entries:
             return HttpResponseNotFound("Sorry! This round is not accepting entries at present.")
         context = self.get_context_data(object=self.object)
@@ -163,7 +163,10 @@ class RoundTimerView(PKOrSlugDetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["edit_url"] = edit_url = self.object.get_edit_url(self.request)
+        context["show_url"] = self.object.get_show_url(self.request)
+        context["results_url"] = self.object.get_results_url(self.request)
         context["edit_url_qr_image"] = make_qr_code_data_uri(edit_url)
+        context["screenshot_url"] = self.object.screenshot.url if self.object.screenshot else None
         return context
 
 
